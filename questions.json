@@ -1,0 +1,575 @@
+{
+  "Aptitude_Logical": [
+    {
+      "question": "If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops definitely Lazzies?",
+      "keywords": ["yes", "transitive", "logic", "syllogism"],
+      "answer_hint": "Should explain transitive property of logical statements"
+    },
+    {
+      "question": "A clock shows 3:15. What is the angle between hour and minute hands?",
+      "keywords": ["7.5 degrees", "angle", "clock", "calculation"],
+      "answer_hint": "Should calculate the exact angle between hands"
+    },
+    {
+      "question": "Find the next number in series: 2, 6, 12, 20, 30, ?",
+      "keywords": ["42", "pattern", "series", "difference"],
+      "answer_hint": "Should identify the pattern of differences"
+    },
+    {
+      "question": "If you have a 3-liter jug and a 5-liter jug, how can you measure exactly 4 liters?",
+      "keywords": ["4 liters", "jug problem", "water", "measurement", "logic"],
+      "answer_hint": "Should explain step-by-step water pouring process"
+    },
+    {
+      "question": "What letter comes next in this sequence: O, T, T, F, F, S, S, E, N, ?",
+      "keywords": ["T", "ten", "sequence", "words", "pattern"],
+      "answer_hint": "Should identify this is One, Two, Three, Four... spelled out"
+    },
+    {
+      "question": "A man is looking at a photograph. His friend asks him 'Who are you looking at?' He replies 'I have no brothers or sisters, but this man's father is my father's son.' Who is in the photograph?",
+      "keywords": ["son", "father", "relationship", "logic", "self"],
+      "answer_hint": "Should deduce it is his own son"
+    },
+    {
+      "question": "Find the next number: 1, 4, 9, 16, 25, 36, ?",
+      "keywords": ["49", "square", "numbers", "pattern"],
+      "answer_hint": "Should identify perfect square numbers"
+    },
+    {
+      "question": "If you rearrange the letters DORMITORY, you can find something related to it. What is it?",
+      "keywords": ["dirty room", "anagram", "rearrange", "letters"],
+      "answer_hint": "Should find the anagram 'dirty room'"
+    }
+  ],
+  "Aptitude_Reasoning": [
+    {
+      "question": "If A is taller than B, and B is taller than C, who is the shortest?",
+      "keywords": ["C", "comparison", "reasoning", "shortest"],
+      "answer_hint": "Should identify C as shortest using logical comparison"
+    },
+    {
+      "question": "All roses are flowers. Some flowers fade quickly. Can we conclude that some roses fade quickly?",
+      "keywords": ["no", "cannot conclude", "logic", "invalid"],
+      "answer_hint": "Should explain why this conclusion is not valid"
+    },
+    {
+      "question": "If A + B = C and C + D = E, what does A + B + D equal?",
+      "keywords": ["E", "substitution", "algebra", "reasoning"],
+      "answer_hint": "Should use substitution to find A + B + D = E"
+    },
+    {
+      "question": "In a race, you overtake the second person. What position are you in now?",
+      "keywords": ["second", "position", "overtake", "logic"],
+      "answer_hint": "Should recognize you are now in second place"
+    },
+    {
+      "question": "If three cats catch three mice in three minutes, how many cats are needed to catch 100 mice in 100 minutes?",
+      "keywords": ["3 cats", "rate", "time", "proportion"],
+      "answer_hint": "Should explain the rate remains constant - 3 cats needed"
+    },
+    {
+      "question": "A man builds a house with four sides, all facing south. A bear walks by. What color is the bear?",
+      "keywords": ["white", "polar", "north pole", "geography"],
+      "answer_hint": "Should recognize the house is at the North Pole, so bear is polar bear - white"
+    },
+    {
+      "question": "What is the next number in the sequence: 1, 1, 2, 3, 5, 8, 13, ?",
+      "keywords": ["21", "fibonacci", "sequence", "sum"],
+      "answer_hint": "Should identify Fibonacci sequence"
+    },
+    {
+      "question": "If you have 6 apples and 7 oranges, and you remove 1 apple and 2 oranges, what's the ratio of apples to oranges remaining?",
+      "keywords": ["5:5", "1:1", "ratio", "proportion", "arithmetic"],
+      "answer_hint": "Should calculate remaining and find ratio 5:5 or 1:1"
+    }
+  ],
+  "Verbal": [
+    {
+      "question": "What is the synonym of 'Benevolent'?",
+      "keywords": ["kind", "generous", "charitable", "compassionate"],
+      "answer_hint": "Should provide a word meaning kind or generous"
+    },
+    {
+      "question": "Correct the sentence: 'She don't like pizza.'",
+      "keywords": ["doesn't", "does not", "grammar", "subject-verb"],
+      "answer_hint": "Should correct to 'doesn't' or 'does not'"
+    },
+    {
+      "question": "What is the antonym of 'Ephemeral'?",
+      "keywords": ["permanent", "lasting", "eternal", "enduring"],
+      "answer_hint": "Should provide a word meaning long-lasting"
+    },
+    {
+      "question": "Fill in the blank: The artist's work was so _____ that it captivated audiences everywhere.",
+      "keywords": ["captivating", "magnificent", "extraordinary", "mesmerizing", "impressive"],
+      "answer_hint": "Should choose a word that means impressive or striking"
+    },
+    {
+      "question": "What is the meaning of the idiom 'Break a leg'?",
+      "keywords": ["good luck", "wish well", "perform", "succeed"],
+      "answer_hint": "Should explain it means wishing someone good luck, especially before performance"
+    },
+    {
+      "question": "Identify the error in: 'Neither of the students were ready for the exam.'",
+      "keywords": ["was", "subject-verb", "neither", "singular"],
+      "answer_hint": "Should identify that 'neither' is singular and needs 'was'"
+    },
+    {
+      "question": "What is a homonym and provide an example.",
+      "keywords": ["same spelling", "different meaning", "sound", "example"],
+      "answer_hint": "Should explain homonyms sound same but mean different things (like 'bank')"
+    },
+    {
+      "question": "Choose the correctly spelled word: Occassion, Ocasion, or Occasion?",
+      "keywords": ["Occasion", "spelling", "correct"],
+      "answer_hint": "Should identify 'Occasion' as the correct spelling"
+    },
+    {
+      "question": "What does 'Ubiquitous' mean?",
+      "keywords": ["everywhere", "present", "widespread", "omnipresent"],
+      "answer_hint": "Should explain it means present everywhere or very common"
+    }
+  ],
+  "HR": [
+    {
+      "question": "Tell me about yourself.",
+      "keywords": ["background", "education", "skills", "experience", "goals"],
+      "answer_hint": "Should cover education, skills, and career goals"
+    },
+    {
+      "question": "What are your strengths and weaknesses?",
+      "keywords": ["strength", "weakness", "improvement", "self-aware"],
+      "answer_hint": "Should mention specific strengths and genuine weaknesses with improvement plans"
+    },
+    {
+      "question": "Why should we hire you?",
+      "keywords": ["skills", "value", "contribute", "fit", "experience"],
+      "answer_hint": "Should highlight unique value and fit for the role"
+    },
+    {
+      "question": "Where do you see yourself in 5 years?",
+      "keywords": ["growth", "career", "goals", "development", "company"],
+      "answer_hint": "Should show ambition and alignment with career path"
+    },
+    {
+      "question": "Why are you interested in this position?",
+      "keywords": ["interest", "role", "company", "growth", "opportunity"],
+      "answer_hint": "Should explain specific reasons for interest in the role"
+    },
+    {
+      "question": "Describe a challenging project you worked on and how you overcame it.",
+      "keywords": ["challenge", "problem", "solution", "teamwork", "result"],
+      "answer_hint": "Should describe situation, action taken, and positive outcome"
+    },
+    {
+      "question": "How do you handle stress and pressure at work?",
+      "keywords": ["manage", "techniques", "prioritize", "calm", "effective"],
+      "answer_hint": "Should discuss coping mechanisms and stress management techniques"
+    },
+    {
+      "question": "Give an example of when you had to work with a difficult colleague.",
+      "keywords": ["conflict", "communication", "solution", "respect", "professional"],
+      "answer_hint": "Should show conflict resolution and interpersonal skills"
+    },
+    {
+      "question": "What motivates you in your work?",
+      "keywords": ["motivation", "achievement", "learning", "growth", "impact"],
+      "answer_hint": "Should provide genuine motivating factors"
+    },
+    {
+      "question": "How do you prioritize multiple tasks?",
+      "keywords": ["prioritize", "organize", "deadline", "important", "efficient"],
+      "answer_hint": "Should explain methods for task prioritization and time management"
+    }
+  ],
+  "Python": [
+    {
+      "question": "What is the difference between a list and a tuple in Python?",
+      "keywords": ["mutable", "immutable", "list", "tuple", "modify"],
+      "answer_hint": "Should explain mutability difference"
+    },
+    {
+      "question": "Explain what is a decorator in Python.",
+      "keywords": ["function", "wrapper", "modify", "behavior", "@"],
+      "answer_hint": "Should explain decorators modify function behavior"
+    },
+    {
+      "question": "What is the difference between '==' and 'is' in Python?",
+      "keywords": ["value", "identity", "equality", "memory", "object"],
+      "answer_hint": "Should explain == checks value, 'is' checks identity"
+    },
+    {
+      "question": "What are Python generators and why are they useful?",
+      "keywords": ["yield", "iterator", "memory", "efficient", "lazy"],
+      "answer_hint": "Should explain generators use yield and are memory efficient"
+    },
+    {
+      "question": "Explain the concept of list comprehension.",
+      "keywords": ["list", "comprehension", "concise", "loop", "condition"],
+      "answer_hint": "Should explain it's a concise way to create lists"
+    },
+    {
+      "question": "What is the Global Interpreter Lock (GIL) in Python?",
+      "keywords": ["GIL", "thread", "lock", "memory", "performance"],
+      "answer_hint": "Should explain GIL prevents true multithreading"
+    },
+    {
+      "question": "What are Python *args and **kwargs?",
+      "keywords": ["args", "kwargs", "variable", "arguments", "flexibility"],
+      "answer_hint": "Should explain variable-length and keyword arguments"
+    },
+    {
+      "question": "Explain the difference between shallow copy and deep copy.",
+      "keywords": ["shallow", "deep", "copy", "reference", "nested"],
+      "answer_hint": "Should explain shallow copies references, deep copies creates new objects"
+    },
+    {
+      "question": "What is a lambda function in Python?",
+      "keywords": ["lambda", "anonymous", "function", "single", "line"],
+      "answer_hint": "Should explain lambda is an anonymous function in one line"
+    },
+    {
+      "question": "How does exception handling work in Python? Explain try-except-finally.",
+      "keywords": ["try", "except", "finally", "error", "handling"],
+      "answer_hint": "Should explain try executes code, except handles errors, finally always runs"
+    }
+  ],
+  "Java": [
+    {
+      "question": "What is the difference between JDK, JRE, and JVM?",
+      "keywords": ["JDK", "JRE", "JVM", "development", "runtime", "virtual machine"],
+      "answer_hint": "Should explain JDK for development, JRE for running, JVM executes bytecode"
+    },
+    {
+      "question": "Explain the concept of inheritance in Java.",
+      "keywords": ["inheritance", "extends", "parent", "child", "reusability"],
+      "answer_hint": "Should explain class inheritance and code reusability"
+    },
+    {
+      "question": "What is method overloading and overriding?",
+      "keywords": ["overloading", "overriding", "same name", "different parameters", "polymorphism"],
+      "answer_hint": "Should differentiate between overloading (same class) and overriding (inheritance)"
+    },
+    {
+      "question": "What are the access modifiers in Java?",
+      "keywords": ["public", "private", "protected", "default", "access"],
+      "answer_hint": "Should list and explain public, private, protected, and default"
+    },
+    {
+      "question": "What is the difference between abstract class and interface?",
+      "keywords": ["abstract", "interface", "implementation", "methods", "contract"],
+      "answer_hint": "Should explain differences in implementation and usage"
+    },
+    {
+      "question": "Explain the concept of encapsulation.",
+      "keywords": ["encapsulation", "private", "getter", "setter", "data hiding"],
+      "answer_hint": "Should explain data hiding and controlled access through methods"
+    },
+    {
+      "question": "What is the difference between static and instance methods?",
+      "keywords": ["static", "instance", "class", "object", "method"],
+      "answer_hint": "Should explain static methods belong to class, instance to objects"
+    },
+    {
+      "question": "What is polymorphism in Java?",
+      "keywords": ["polymorphism", "many forms", "method", "type", "behavior"],
+      "answer_hint": "Should explain objects can take multiple forms"
+    },
+    {
+      "question": "Explain the Collections framework in Java.",
+      "keywords": ["collections", "list", "set", "map", "framework"],
+      "answer_hint": "Should describe List, Set, and Map interfaces"
+    },
+    {
+      "question": "What is exception handling in Java?",
+      "keywords": ["exception", "try", "catch", "finally", "throw"],
+      "answer_hint": "Should explain try-catch-finally blocks for error handling"
+    }
+  ],
+  "SQL": [
+    {
+      "question": "What is the difference between INNER JOIN and LEFT JOIN?",
+      "keywords": ["inner join", "left join", "matching", "all rows", "null"],
+      "answer_hint": "Should explain INNER returns matching rows, LEFT returns all from left table"
+    },
+    {
+      "question": "What is a PRIMARY KEY and FOREIGN KEY?",
+      "keywords": ["primary key", "foreign key", "unique", "reference", "relationship"],
+      "answer_hint": "Should explain PRIMARY KEY uniquely identifies, FOREIGN KEY references another table"
+    },
+    {
+      "question": "Explain the difference between WHERE and HAVING clause.",
+      "keywords": ["where", "having", "filter", "group by", "aggregate"],
+      "answer_hint": "Should explain WHERE filters rows, HAVING filters groups"
+    },
+    {
+      "question": "What is normalization in databases?",
+      "keywords": ["normalization", "1NF", "2NF", "3NF", "redundancy"],
+      "answer_hint": "Should explain reducing redundancy through normal forms"
+    },
+    {
+      "question": "What is the difference between UNION and UNION ALL?",
+      "keywords": ["union", "union all", "duplicates", "distinct", "combine"],
+      "answer_hint": "Should explain UNION removes duplicates, UNION ALL keeps them"
+    },
+    {
+      "question": "What is a subquery in SQL?",
+      "keywords": ["subquery", "inner query", "nested", "select", "result"],
+      "answer_hint": "Should explain a query within another query"
+    },
+    {
+      "question": "Explain the concept of indexes in SQL.",
+      "keywords": ["index", "performance", "fast", "search", "overhead"],
+      "answer_hint": "Should explain indexes speed up queries but add write overhead"
+    },
+    {
+      "question": "What is the difference between DISTINCT and GROUP BY?",
+      "keywords": ["distinct", "group by", "unique", "aggregate", "rows"],
+      "answer_hint": "Should explain DISTINCT removes duplicates, GROUP BY aggregates"
+    },
+    {
+      "question": "What are views in SQL?",
+      "keywords": ["view", "virtual", "table", "query", "simplify"],
+      "answer_hint": "Should explain views are virtual tables based on queries"
+    },
+    {
+      "question": "Explain the concept of transactions and ACID properties.",
+      "keywords": ["transaction", "ACID", "atomic", "consistent", "isolated", "durable"],
+      "answer_hint": "Should explain Atomicity, Consistency, Isolation, and Durability"
+    }
+  ],
+  "Company_Google": [
+    {
+      "question": "How would you design a URL shortening service like bit.ly?",
+      "keywords": ["hash", "database", "unique", "mapping", "scale"],
+      "answer_hint": "Should discuss hashing, database design, and scalability"
+    },
+    {
+      "question": "Why do you want to work at Google?",
+      "keywords": ["innovation", "technology", "culture", "impact", "learning"],
+      "answer_hint": "Should show genuine interest in Google's mission and culture"
+    },
+    {
+      "question": "Design an elevator system.",
+      "keywords": ["system design", "elevator", "algorithms", "scheduling", "efficiency"],
+      "answer_hint": "Should discuss how elevators are scheduled and optimized"
+    },
+    {
+      "question": "How would you find the nth largest element in an array?",
+      "keywords": ["algorithm", "sorting", "nth largest", "efficient", "heap"],
+      "answer_hint": "Should discuss various approaches including heap or quickselect"
+    }
+  ],
+  "Company_Microsoft": [
+    {
+      "question": "Explain cloud computing and Azure services.",
+      "keywords": ["cloud", "azure", "services", "infrastructure", "platform"],
+      "answer_hint": "Should explain cloud concepts and mention Azure services"
+    },
+    {
+      "question": "How do you handle disagreements in a team?",
+      "keywords": ["communication", "collaboration", "respect", "solution", "team"],
+      "answer_hint": "Should demonstrate conflict resolution and teamwork skills"
+    },
+    {
+      "question": "Tell me about a time when you had to learn a new technology quickly.",
+      "keywords": ["learning", "technology", "quick", "adapt", "skill"],
+      "answer_hint": "Should show adaptability and learning capability"
+    },
+    {
+      "question": "How would you design a recommendation system?",
+      "keywords": ["recommendation", "algorithm", "collaborative", "filtering", "data"],
+      "answer_hint": "Should discuss algorithms and data analysis approaches"
+    }
+  ],
+  "Company_Amazon": [
+    {
+      "question": "How would you design a parking lot system?",
+      "keywords": ["system design", "database", "parking", "levels", "spots"],
+      "answer_hint": "Should discuss parking lot levels, availability tracking, and reservation system"
+    },
+    {
+      "question": "Tell me about a time you had to deliver results under pressure.",
+      "keywords": ["pressure", "deadline", "deliver", "results", "leadership"],
+      "answer_hint": "Should demonstrate capability to work under pressure and deliver on commitments"
+    },
+    {
+      "question": "How would you design an e-commerce product recommendation system?",
+      "keywords": ["recommendation", "e-commerce", "algorithm", "data", "personalization"],
+      "answer_hint": "Should discuss algorithms, data analysis, and personalization strategies"
+    },
+    {
+      "question": "Describe your experience with working in large-scale systems.",
+      "keywords": ["scale", "system", "large", "architecture", "distributed"],
+      "answer_hint": "Should explain understanding of scalability and distributed systems"
+    }
+  ],
+  "C": [
+    {
+      "question": "What is the difference between pointers and arrays in C?",
+      "keywords": ["pointer", "array", "address", "memory", "index"],
+      "answer_hint": "Should explain pointers are addresses, arrays are contiguous memory blocks"
+    },
+    {
+      "question": "Explain what is dynamic memory allocation in C.",
+      "keywords": ["malloc", "free", "calloc", "realloc", "memory"],
+      "answer_hint": "Should explain malloc allocates memory at runtime, must be freed"
+    },
+    {
+      "question": "What is the difference between struct and union in C?",
+      "keywords": ["struct", "union", "memory", "allocation", "field"],
+      "answer_hint": "Should explain struct allocates separate space for each member, union shares space"
+    },
+    {
+      "question": "What is a function pointer and how is it used?",
+      "keywords": ["function pointer", "callback", "address", "invoke", "parameter"],
+      "answer_hint": "Should explain function pointers store function addresses and enable callbacks"
+    },
+    {
+      "question": "Explain the scope of variables in C (local, global, static).",
+      "keywords": ["scope", "local", "global", "static", "extern"],
+      "answer_hint": "Should describe lifetime and visibility of different variable scopes"
+    },
+    {
+      "question": "What are macros and how do they differ from functions?",
+      "keywords": ["macro", "#define", "preprocessor", "function", "expansion"],
+      "answer_hint": "Should explain macros are text substitution at compile time, no type checking"
+    },
+    {
+      "question": "How do you avoid memory leaks in C?",
+      "keywords": ["free", "malloc", "leak", "management", "cleanup"],
+      "answer_hint": "Should explain freeing all allocated memory and proper pointer handling"
+    },
+    {
+      "question": "What are bitwise operators and when would you use them?",
+      "keywords": ["bitwise", "AND", "OR", "XOR", "shift", "flags"],
+      "answer_hint": "Should explain bit operations used for flags, bit manipulation, and performance"
+    }
+  ],
+  "AI": [
+    {
+      "question": "What is the difference between supervised and unsupervised learning?",
+      "keywords": ["supervised", "unsupervised", "labeled", "unlabeled", "training"],
+      "answer_hint": "Should explain supervised uses labeled data, unsupervised finds patterns"
+    },
+    {
+      "question": "Explain how neural networks learn through backpropagation.",
+      "keywords": ["backpropagation", "gradient", "descent", "weights", "error"],
+      "answer_hint": "Should explain forward pass, calculate loss, backward pass to update weights"
+    },
+    {
+      "question": "What is the role of activation functions in neural networks?",
+      "keywords": ["activation", "relu", "sigmoid", "tanh", "non-linear"],
+      "answer_hint": "Should explain activation functions add non-linearity to learn complex patterns"
+    },
+    {
+      "question": "What is overfitting and how do you prevent it?",
+      "keywords": ["overfitting", "regularization", "dropout", "validation", "generalization"],
+      "answer_hint": "Should explain model memorizing data, prevent with regularization and validation"
+    },
+    {
+      "question": "Explain the concept of embeddings in NLP.",
+      "keywords": ["embeddings", "word2vec", "vector", "semantic", "representation"],
+      "answer_hint": "Should explain embeddings represent words as dense vectors capturing meaning"
+    },
+    {
+      "question": "What is transfer learning and why is it useful?",
+      "keywords": ["transfer", "pretrained", "fine-tune", "knowledge", "efficiency"],
+      "answer_hint": "Should explain reusing pretrained models for new tasks with less data"
+    },
+    {
+      "question": "What is the attention mechanism in neural networks?",
+      "keywords": ["attention", "weights", "focus", "transformer", "relevance"],
+      "answer_hint": "Should explain attention learns to focus on relevant parts of input"
+    },
+    {
+      "question": "Explain the difference between CNN and RNN.",
+      "keywords": ["CNN", "RNN", "convolution", "recurrent", "spatial", "temporal"],
+      "answer_hint": "Should explain CNN for spatial data, RNN for sequential data"
+    }
+  ],
+  "ML": [
+    {
+      "question": "What is the difference between regression and classification?",
+      "keywords": ["regression", "classification", "continuous", "discrete", "prediction"],
+      "answer_hint": "Should explain regression predicts continuous values, classification discrete categories"
+    },
+    {
+      "question": "Explain the bias-variance tradeoff in machine learning.",
+      "keywords": ["bias", "variance", "tradeoff", "underfitting", "overfitting"],
+      "answer_hint": "Should explain high bias underfits, high variance overfits"
+    },
+    {
+      "question": "What is cross-validation and why is it important?",
+      "keywords": ["cross-validation", "k-fold", "test", "train", "generalization"],
+      "answer_hint": "Should explain k-fold validates model performance on different data splits"
+    },
+    {
+      "question": "What are the differences between decision trees and random forests?",
+      "keywords": ["decision tree", "random forest", "ensemble", "overfitting", "accuracy"],
+      "answer_hint": "Should explain random forests combine multiple trees to reduce overfitting"
+    },
+    {
+      "question": "Explain how k-means clustering works.",
+      "keywords": ["k-means", "clustering", "centroid", "unsupervised", "convergence"],
+      "answer_hint": "Should explain iterative algorithm assigning points to nearest centroid"
+    },
+    {
+      "question": "What is feature scaling and why is it necessary?",
+      "keywords": ["feature scaling", "normalization", "standardization", "range", "algorithm"],
+      "answer_hint": "Should explain scaling prevents features with large ranges from dominating"
+    },
+    {
+      "question": "What is the ROC curve and how do you interpret it?",
+      "keywords": ["ROC", "AUC", "true positive", "false positive", "threshold"],
+      "answer_hint": "Should explain ROC curve shows tradeoff between TPR and FPR at different thresholds"
+    },
+    {
+      "question": "Explain ensemble methods like bagging and boosting.",
+      "keywords": ["ensemble", "bagging", "boosting", "weak learners", "accuracy"],
+      "answer_hint": "Should explain combining multiple models reduces variance and improves accuracy"
+    }
+  ],
+  "FullStack": [
+    {
+      "question": "Explain the MVC architecture and its components.",
+      "keywords": ["MVC", "model", "view", "controller", "separation", "concern"],
+      "answer_hint": "Should explain Model (data), View (UI), Controller (logic) separation"
+    },
+    {
+      "question": "What is the difference between REST and GraphQL APIs?",
+      "keywords": ["REST", "GraphQL", "query", "endpoint", "flexibility", "overfetching"],
+      "answer_hint": "Should explain REST uses endpoints, GraphQL allows flexible queries"
+    },
+    {
+      "question": "How does authentication and authorization differ?",
+      "keywords": ["authentication", "authorization", "verify", "identity", "permission"],
+      "answer_hint": "Should explain authentication verifies who you are, authorization what you can do"
+    },
+    {
+      "question": "What is CORS and why is it important for web development?",
+      "keywords": ["CORS", "cross-origin", "browser", "security", "policy"],
+      "answer_hint": "Should explain CORS controls cross-origin requests for security"
+    },
+    {
+      "question": "Explain the concept of database normalization.",
+      "keywords": ["normalization", "1NF", "2NF", "3NF", "redundancy", "dependencies"],
+      "answer_hint": "Should explain reducing redundancy and improving data integrity through normal forms"
+    },
+    {
+      "question": "What is caching and where is it used in a full stack application?",
+      "keywords": ["caching", "performance", "memory", "database", "browser", "CDN"],
+      "answer_hint": "Should explain caching reduces database load and improves response time"
+    },
+    {
+      "question": "How do you handle errors and exceptions in a web application?",
+      "keywords": ["error handling", "logging", "try-catch", "graceful", "user experience"],
+      "answer_hint": "Should explain logging errors, providing meaningful messages, graceful degradation"
+    },
+    {
+      "question": "Explain the deployment process for a full stack application.",
+      "keywords": ["deployment", "CI/CD", "testing", "production", "monitoring", "scaling"],
+      "answer_hint": "Should explain code pipeline, testing, deployment stages, and monitoring"
+    }
+  ]
+}

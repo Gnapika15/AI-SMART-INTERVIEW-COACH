@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Smart Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .dashboard-header h1 {
+            color: #5169ff;
+            font-size: 2.5rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .dashboard-header h2 {
+            color: #666;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .charts-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .charts-section h2 {
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            position: relative;
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .chart-container h3 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .progress-bar-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-bar-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .category-progress {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .category-progress-bar {
+            background: #eee;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .category-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #5169ff;
+            color: white;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(81, 105, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e74c3c;
+            color: white;
+            padding: 0.8rem 1.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: #c0392b;
+        }
+
+        .history-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .history-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .history-card {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #5169ff;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .history-header h3 {
+            color: #333;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .timestamp {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .history-content {
+            margin-bottom: 1rem;
+        }
+
+        .history-content p {
+            margin: 0.5rem 0;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .score-badge.excellent {
+            background: #27ae60;
+            color: white;
+        }
+
+        .score-badge.good {
+            background: #3498db;
+            color: white;
+        }
+
+        .score-badge.average {
+            background: #f39c12;
+            color: white;
+        }
+
+        .score-badge.low {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-view-details {
+            background: #5169ff;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-view-details:hover {
+            background: #3d4fcf;
+        }
+
+        .detailed-view {
+            background: white;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .detailed-view h4 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .mini-result {
+            background: #f0f0f0;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            border-radius: 4px;
+            border-left: 3px solid #5169ff;
+        }
+
+        .mini-result p {
+            margin: 0.3rem 0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .empty-state p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>📊 Your Dashboard</h1>
+                <h2>Welcome back, {{ username }}!</h2>
+            </div>
+            
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Attempts</h3>
+                    <p class="stat-number">{{ total_attempts }}</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Average Score</h3>
+                    <p class="stat-number">{{ avg_overall }}/10</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Best Score</h3>
+                    <p class="stat-number">{{ best_score }}/10</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Categories Tried</h3>
+                    <p class="stat-number">{{ categories_attempted|length }}</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="dashboard-actions">
+                <a href="/categories" class="btn-primary">Start New Practice →</a>
+                <a href="/logout" class="btn-secondary">Logout</a>
+            </div>
+            
+            <!-- Charts Section -->
+            {% if past_results %}
+            <div class="charts-section">
+                <h2>📈 Performance Analytics</h2>
+                
+                <div class="charts-grid">
+                    <!-- Score Trend Chart -->
+                    <div class="chart-container">
+                        <h3>Score Progress Over Time</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="scoreChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Category Performance Chart -->
+                    <div class="chart-container">
+                        <h3>Category-wise Performance</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress by Category -->
+            <div class="progress-bar-section">
+                <h2>📊 Category Progress</h2>
+                <div id="progressContainer"></div>
+            </div>
+            {% endif %}
+            
+            <!-- Past Results -->
+            <div class="history-section">
+                <h2>📚 Your Practice History</h2>
+                
+                {% if past_results %}
+                    <div class="history-grid">
+                        {% for result in past_results|reverse %}
+                        <div class="history-card">
+                            <div class="history-header">
+                                <h3>Attempt #{{ result.attempt_number }}</h3>
+                                <span class="timestamp">{{ result.timestamp }}</span>
+                            </div>
+                            
+                            <div class="history-content">
+                                <p><strong>Category:</strong> {{ result.category.replace('_', ' ').title() }}</p>
+                                <p><strong>Questions:</strong> {{ result.total_questions }}</p>
+                                <p><strong>Score:</strong> {{ result.total_score }}/{{ result.total_questions * 10 }}</p>
+                                <p><strong>Average:</strong> 
+                                    <span class="score-badge {% if result.avg_score >= 8 %}excellent{% elif result.avg_score >= 6 %}good{% elif result.avg_score >= 4 %}average{% else %}low{% endif %}">
+                                        {{ result.avg_score }}/10
+                                    </span>
+                                </p>
+                            </div>
+                            
+                            <button onclick="showDetails(this); return false;" class="btn-view-details" data-index="{{ loop.index0 }}">View Detailed Results</button>
+                            
+                            <!-- Hidden detailed results -->
+                            <div id="details-{{ loop.index0 }}" class="detailed-view" style="display: none;">
+                                <h4>Question-wise Breakdown:</h4>
+                                {% for q in result.results %}
+                                <div class="mini-result">
+                                    <p><strong>Q{{ loop.index }}:</strong> {{ q.question[:100] }}...</p>
+                                    <p><strong>Your Score:</strong> {{ q.score }}/10</p>
+                                    <p><strong>Feedback:</strong> {{ q.feedback }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <p>🎯 No practice attempts yet!</p>
+                        <p>Start your first interview practice to see your results here.</p>
+                        <a href="/categories" class="btn-primary">Start Now</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showDetails(button) {
+            var index = button.getAttribute('data-index');
+            var details = document.getElementById('details-' + index);
+            if (details.style.display === 'none' || details.style.display === '') {
+                details.style.display = 'block';
+                button.textContent = 'Hide Detailed Results';
+            } else {
+                details.style.display = 'none';
+                button.textContent = 'View Detailed Results';
+            }
+        }
+
+        // Prepare data from Flask template
+        const pastResults = {{ past_results|tojson }};
+
+        if (pastResults && pastResults.length > 0) {
+            // Prepare data for Score Trend Chart
+            const scoreData = pastResults.map((r, idx) => ({
+                attempt: idx + 1,
+                score: r.avg_score,
+                category: r.category
+            }));
+
+            // Prepare data for Category Performance Chart
+            const categoryScores = {};
+            const categoryAttempts = {};
+            
+            pastResults.forEach(r => {
+                const cat = r.category.replace('_', ' ');
+                if (!categoryScores[cat]) {
+                    categoryScores[cat] = [];
+                    categoryAttempts[cat] = 0;
+                }
+                categoryScores[cat].push(r.avg_score);
+                categoryAttempts[cat]++;
+            });
+
+            // Calculate average scores per category
+            const categoryAvgs = {};
+            Object.keys(categoryScores).forEach(cat => {
+                const avg = categoryScores[cat].reduce((a, b) => a + b, 0) / categoryScores[cat].length;
+                categoryAvgs[cat] = avg.toFixed(1);
+            });
+
+            // Score Trend Chart
+            const scoreCtx = document.getElementById('scoreChart').getContext('2d');
+            new Chart(scoreCtx, {
+                type: 'line',
+                data: {
+                    labels: scoreData.map(d => 'Attempt ' + d.attempt),
+                    datasets: [{
+                        label: 'Average Score',
+                        data: scoreData.map(d => d.score),
+                        borderColor: '#5169ff',
+                        backgroundColor: 'rgba(81, 105, 255, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#5169ff',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                font: { size: 12 },
+                                color: '#333'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: { color: '#666' },
+                            grid: { color: '#eee' }
+                        },
+                        x: {
+                            ticks: { color: '#666' },
+                            grid: { color: '#eee' }
+                        }
+                    }
+                }
+            });
+
+            // Category Performance Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(categoryAvgs),
+                    datasets: [{
+                        label: 'Average Score by Category',
+                        data: Object.values(categoryAvgs),
+                        borderColor: '#764ba2',
+                        backgroundColor: 'rgba(118, 75, 162, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#764ba2'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: { color: '#666', stepSize: 2 },
+                            grid: { color: '#eee' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: { size: 12 },
+                                color: '#333'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Create progress bars
+            const progressContainer = document.getElementById('progressContainer');
+            Object.keys(categoryAvgs).forEach(cat => {
+                const score = parseFloat(categoryAvgs[cat]);
+                const percentage = (score / 10) * 100;
+                
+                const progressHtml = `
+                    <div class="category-progress">
+                        <div class="category-progress-label">
+                            <span>${cat}</span>
+                            <span>${categoryAvgs[cat]}/10 (${categoryAttempts[cat]} attempts)</span>
+                        </div>
+                        <div class="category-progress-bar">
+                            <div class="category-progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+                progressContainer.innerHTML += progressHtml;
+            });
+        }
+    </script>
+</body>
+</html>

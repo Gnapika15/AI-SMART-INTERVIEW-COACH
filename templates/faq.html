@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ & Resources - AI Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .faq-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-content p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .faq-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 1.5rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+            padding-left: 1.5rem;
+        }
+
+        .faq-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-question {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: #764ba2;
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            color: #555;
+            line-height: 1.8;
+            display: none;
+            margin-top: 0.7rem;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tips-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .tips-list li {
+            padding: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #555;
+        }
+
+        .tips-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .resource-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .resource-card h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-card p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .back-to-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-to-home a {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-home a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .faq-container {
+                padding: 1rem;
+            }
+
+            .faq-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .faq-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <!-- Header -->
+        <div class="faq-header">
+            <div class="header-content">
+                <h1>❓ FAQ & Resources</h1>
+                <p>Technical FAQs for all programming languages and topics</p>
+            </div>
+            <a href="/home" class="back-btn">← Back to Home</a>
+        </div>
+
+        <!-- Python FAQ -->
+        <div class="faq-section">
+            <h2>🐍 Python Programming FAQs</h2>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What is the difference between list and tuple?
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Lists</strong> are mutable (can be modified) while <strong>tuples</strong> are immutable (cannot be changed).</p>
+                    <ul class="tips-list">
+                        <li>Lists use [], tuples use ()</li>
+                        <li>Lists slower but flexible, tuples faster and fixed</li>
+                        <li>Tuples can be dictionary keys, lists cannot</li>
+                        <li>Use lists for changing data, tuples for fixed collections</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What are list comprehensions and when to use them?
+                </div>
+                <div class="faq-answer">
+                    <p>Concise way to create lists. Example: [x*2 for x in range(10)]</p>
+                    <ul class="tips-list">
+                        <li>Can include conditions: [x for x in range(10) if x % 2 == 0]</li>
+                        <li>Faster and more Pythonic than loops</li>
+                        <li>Use for transforming or filtering lists</li>
+                        <li>Improves code readability</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What are decorators and how do they work?
+                </div>
+                <div class="faq-answer">
+                    <p>Functions that modify or enhance other functions without changing them permanently.</p>
+                    <ul class="tips-list">
+                        <li>Defined with @ symbol before function</li>
+                        <li>Common uses: logging, authentication, caching</li>
+                        <li>Wrap a function and modify its behavior</li>
+                        <li>Example: @decorator def my_function(): pass</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What is the GIL (Global Interpreter Lock)?
+                </div>
+                <div class="faq-answer">
+                    <p>Mutex allowing only one thread to execute Python bytecode at a time.</p>
+                    <ul class="tips-list">
+                        <li>Prevents true parallel execution in multi-threaded programs</li>
+                        <li>Doesn't affect multi-process programs</li>
+                        <li>Necessary for CPython memory management</li>
+                        <li>Limitation for CPU-bound multi-threaded applications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Java FAQ -->
+        <div class="faq-section">
+            <h2>☕ Java Programming FAQs</h2>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Difference between abstract classes and interfaces?
+                </div>
+                <div class="faq-answer">
+                    <p>Both for abstraction but with key differences:</p>
+                    <ul class="tips-list">
+                        <li>Abstract classes have concrete methods, interfaces cannot (Java 8)</li>
+                        <li>Extends for abstract, implements for interfaces</li>
+                        <li>One abstract class, multiple interfaces allowed</li>
+                        <li>Abstract classes have state, interfaces generally don't</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Types of exception handling in Java?
+                </div>
+                <div class="faq-answer">
+                    <p>Multiple ways to handle exceptions:</p>
+                    <ul class="tips-list">
+                        <li><strong>Checked:</strong> Must catch or declare (IOException, SQLException)</li>
+                        <li><strong>Unchecked:</strong> Don't need to catch (NullPointerException)</li>
+                        <li><strong>Try-Catch-Finally:</strong> Catch exceptions, finally always executes</li>
+                        <li><strong>Try-with-resources:</strong> Auto-closes resources (Java 7+)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Difference between == and .equals()?
+                </div>
+                <div class="faq-answer">
+                    <p>Both compare but work differently:</p>
+                    <ul class="tips-list">
+                        <li><strong>==</strong> compares object references/memory addresses</li>
+                        <li><strong>.equals()</strong> compares actual content/value</li>
+                        <li>For Strings, always use .equals() for content comparison</li>
+                        <li>== checks if two objects are the same instance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What is Collections Framework?
+                </div>
+                <div class="faq-answer">
+                    <p>Provides classes and interfaces for storing and manipulating groups of objects:</p>
+                    <ul class="tips-list">
+                        <li><strong>List:</strong> Ordered, duplicates allowed (ArrayList, LinkedList)</li>
+                        <li><strong>Set:</strong> Unordered, no duplicates (HashSet, TreeSet)</li>
+                        <li><strong>Map:</strong> Key-value pairs (HashMap, TreeMap)</li>
+                        <li>Each has different performance for different operations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SQL FAQ -->
+        <div class="faq-section">
+            <h2>🗄️ SQL & Databases FAQs</h2>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Different types of JOINs in SQL?
+                </div>
+                <div class="faq-answer">
+                    <p>JOINs combine rows from multiple tables:</p>
+                    <ul class="tips-list">
+                        <li><strong>INNER JOIN:</strong> Rows existing in both tables</li>
+                        <li><strong>LEFT JOIN:</strong> All left table rows + matching right rows</li>
+                        <li><strong>RIGHT JOIN:</strong> All right table rows + matching left rows</li>
+                        <li><strong>FULL JOIN:</strong> All rows from both tables</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What is database normalization?
+                </div>
+                <div class="faq-answer">
+                    <p>Organizes data to minimize redundancy and dependency:</p>
+                    <ul class="tips-list">
+                        <li><strong>1NF:</strong> Atomic values, no repeating groups</li>
+                        <li><strong>2NF:</strong> Non-key attributes depend on entire primary key</li>
+                        <li><strong>3NF:</strong> No transitive dependencies between non-key attributes</li>
+                        <li>Reduces duplication and improves data integrity</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    WHERE vs HAVING clauses?
+                </div>
+                <div class="faq-answer">
+                    <p>Both filter data but at different stages:</p>
+                    <ul class="tips-list">
+                        <li><strong>WHERE:</strong> Filters rows before grouping</li>
+                        <li><strong>HAVING:</strong> Filters groups after aggregation</li>
+                        <li>WHERE can't use aggregate functions, HAVING can</li>
+                        <li>Example: WHERE age > 25 vs HAVING COUNT(*) > 5</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What are indexes and their importance?
+                </div>
+                <div class="faq-answer">
+                    <p>Data structures that speed up data retrieval:</p>
+                    <ul class="tips-list">
+                        <li>Create sorted copy for faster lookup</li>
+                        <li>Reduce I/O operations needed to find data</li>
+                        <li>Slow down INSERT, UPDATE, DELETE operations</li>
+                        <li>Best for frequently searched columns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- C FAQ -->
+        <div class="faq-section">
+            <h2>⚙️ C Programming FAQs</h2>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What are pointers and how do they work?
+                </div>
+                <div class="faq-answer">
+                    <p>Pointers store memory addresses of variables:</p>
+                    <ul class="tips-list">
+                        <li>Declared with *: int *ptr;</li>
+                        <li>& operator gets address: ptr = &x;</li>
+                        <li>* operator dereferences: printf("%d", *ptr);</li>
+                        <li>Essential for dynamic memory and complex structures</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Stack vs Heap memory?
+                </div>
+                <div class="faq-answer">
+                    <p>Both memory regions but work differently:</p>
+                    <ul class="tips-list">
+                        <li><strong>Stack:</strong> Local variables, function parameters, return addresses</li>
+                        <li><strong>Heap:</strong> Dynamically allocated, larger but slower</li>
+                        <li>Stack memory auto-freed when variable goes out of scope</li>
+                        <li>Heap memory must be manually freed using free()</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Dynamic memory allocation and when to use?
+                </div>
+                <div class="faq-answer">
+                    <p>Allocate memory at runtime:</p>
+                    <ul class="tips-list">
+                        <li><strong>malloc():</strong> Allocates memory, returns void pointer</li>
+                        <li><strong>calloc():</strong> Allocates and initializes to zero</li>
+                        <li><strong>free():</strong> Deallocates to prevent leaks</li>
+                        <li>Use when size unknown at compile time or need large data</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Structures vs Arrays?
+                </div>
+                <div class="faq-answer">
+                    <p>Structures group different data types together:</p>
+                    <ul class="tips-list">
+                        <li><strong>Array:</strong> Collection of same data type</li>
+                        <li><strong>Structure:</strong> Collection of different data types</li>
+                        <li>Access structure members with . or -> operator</li>
+                        <li>Useful for creating complex data with related information</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI FAQ -->
+        <div class="faq-section">
+            <h2>🤖 AI & Machine Learning FAQs</h2>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    AI vs Machine Learning vs Deep Learning?
+                </div>
+                <div class="faq-answer">
+                    <p>Related terms with different scopes:</p>
+                    <ul class="tips-list">
+                        <li><strong>AI:</strong> Broad field of creating intelligent machines</li>
+                        <li><strong>ML:</strong> Subset of AI where systems learn from data</li>
+                        <li><strong>DL:</strong> Subset of ML using neural networks with many layers</li>
+                        <li>Each builds upon previous one in scope and capability</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What are neural networks?
+                </div>
+                <div class="faq-answer">
+                    <p>Mimic biological neurons for pattern recognition:</p>
+                    <ul class="tips-list">
+                        <li><strong>Neurons:</strong> Processing units with inputs and outputs</li>
+                        <li><strong>Weights:</strong> Parameters determining neuron importance</li>
+                        <li><strong>Activation Functions:</strong> Introduce non-linearity (ReLU, Sigmoid)</li>
+                        <li><strong>Layers:</strong> Input, hidden (process), and output layers</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What is backpropagation?
+                </div>
+                <div class="faq-answer">
+                    <p>Algorithm for training neural networks:</p>
+                    <ul class="tips-list">
+                        <li>Forward pass: Compute predictions through network</li>
+                        <li>Calculate loss: Compare predictions with actual values</li>
+                        <li>Backward pass: Propagate error back through layers</li>
+                        <li>Update weights: Adjust to minimize loss</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What is overfitting and how to prevent?
+                </div>
+                <div class="faq-answer">
+                    <p>When model memorizes training data instead of learning patterns:</p>
+                    <ul class="tips-list">
+                        <li>Model performs well on training but poorly on new data</li>
+                        <li><strong>Prevention:</strong> Use regularization (L1/L2), dropout, early stopping</li>
+                        <li>Cross-validation helps detect overfitting</li>
+                        <li>Use simpler models when possible</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FullStack FAQ -->
+        <div class="faq-section">
+            <h2>🌐 Full Stack Development FAQs</h2>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    GET vs POST requests?
+                </div>
+                <div class="faq-answer">
+                    <p>Both HTTP methods but serve different purposes:</p>
+                    <ul class="tips-list">
+                        <li><strong>GET:</strong> Retrieves data, visible in URL, has size limit</li>
+                        <li><strong>POST:</strong> Sends data, in body, no visible URL</li>
+                        <li>GET is idempotent, POST can modify data</li>
+                        <li>Use GET for retrieving, POST for creating/modifying</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    What is REST API?
+                </div>
+                <div class="faq-answer">
+                    <p>Architectural style for web services:</p>
+                    <ul class="tips-list">
+                        <li><strong>Client-Server:</strong> Separate concerns</li>
+                        <li><strong>Stateless:</strong> Each request self-contained</li>
+                        <li><strong>Resources:</strong> Data as resources with URIs</li>
+                        <li>Use: GET (read), POST (create), PUT (update), DELETE</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Synchronous vs Asynchronous?
+                </div>
+                <div class="faq-answer">
+                    <p>Handle operations differently in timing:</p>
+                    <ul class="tips-list">
+                        <li><strong>Sync:</strong> Code executes line by line, waits</li>
+                        <li><strong>Async:</strong> Operations execute without waiting</li>
+                        <li>Async improves performance for I/O-bound operations</li>
+                        <li>JavaScript: async/await, callbacks, Promises</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(event)">
+                <div class="faq-question">
+                    <span class="faq-toggle">▼</span>
+                    Authentication vs Authorization?
+                </div>
+                <div class="faq-answer">
+                    <p>Security concepts serving different purposes:</p>
+                    <ul class="tips-list">
+                        <li><strong>Auth:</strong> Verifies who the user is</li>
+                        <li><strong>Authz:</strong> Determines what resources user can access</li>
+                        <li>Methods: JWT tokens, sessions, OAuth 2.0</li>
+                        <li>Always use HTTPS to protect credentials</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="back-to-home">
+            <a href="/home">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleFAQ(event) {
+            const faqItem = event.currentTarget;
+            faqItem.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

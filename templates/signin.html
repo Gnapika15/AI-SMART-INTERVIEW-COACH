@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Smart Interview Coach - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+        <div class="hero-image">
+            <img src="https://img.freepik.com/free-vector/robot-interviewing-candidate-job-interview_74855-10624.jpg" alt="AI Interview">
+        </div>
+    <h1>🎯 AI Smart Interview Coach</h1>
+    <p class="subtitle">Practice. Learn. Excel.</p>
+            
+            <!-- Tab Buttons -->
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showLogin()">Login</button>
+                <button class="tab-btn" onclick="showSignup()">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form">
+                <h2>Welcome Back!</h2>
+                <form action="/login" method="POST">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" name="email" 
+                               placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+    <label for="login-password">Password</label>
+    <div class="password-input-wrapper">
+        <input type="password" id="login-password" name="password" 
+               placeholder="Enter your password" required>
+        <span class="password-toggle" onclick="togglePassword('login-password', this)">
+            👁️
+        </span>
+    </div>
+</div>
+                    
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <button class="btn-google" onclick="googleSignIn()">
+                    <img src="https://www.google.com/favicon.ico" alt="Google" width="20">
+                    Sign in with Google
+                </button>
+                
+                <p class="switch-text">
+                    Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a>
+                </p>
+            </div>
+            
+            <!-- Signup Form -->
+            <div id="signupForm" class="auth-form" style="display: none;">
+                <h2>Create Account</h2>
+                <form action="/signup" method="POST">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" name="name" 
+                               placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" name="email" 
+                               placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+    <label for="signup-password">Password</label>
+    <div class="password-input-wrapper">
+        <input type="password" id="signup-password" name="password" 
+               placeholder="Create a password" required minlength="6">
+        <span class="password-toggle" onclick="togglePassword('signup-password', this)">
+            👁️
+        </span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="signup-confirm">Confirm Password</label>
+    <div class="password-input-wrapper">
+        <input type="password" id="signup-confirm" name="confirm_password" 
+               placeholder="Re-enter your password" required minlength="6">
+        <span class="password-toggle" onclick="togglePassword('signup-confirm', this)">
+            👁️
+        </span>
+    </div>
+</div>
+                    
+                    <button type="submit" class="btn-primary">Sign Up</button>
+                </form>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <button class="btn-google" onclick="googleSignIn()">
+                    <img src="https://www.google.com/favicon.ico" alt="Google" width="20">
+                    Sign up with Google
+                </button>
+                
+                <p class="switch-text">
+                    Already have an account? <a href="#" onclick="showLogin()">Login</a>
+                </p>
+            </div>
+            
+            <!-- Error/Success Messages -->
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+            
+            {% if success %}
+            <div class="alert alert-success">{{ success }}</div>
+            {% endif %}
+            
+            <div class="features">
+                <h3>What you'll get:</h3>
+                <ul>
+                    <li>✅ Multiple interview categories</li>
+                    <li>✅ Real-time answer evaluation</li>
+                    <li>✅ Detailed feedback & suggestions</li>
+                    <li>✅ Performance tracking</li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <script>
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+            
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs[0].classList.add('active');
+            tabs[1].classList.remove('active');
+        }
+        
+        function showSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+            
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs[0].classList.remove('active');
+            tabs[1].classList.add('active');
+        }
+        
+        function googleSignIn() {
+            alert('Google Sign-In will be implemented with Google OAuth API. For now, use email/password.');
+            // In production, you would integrate Google OAuth here
+        }
+
+        function togglePassword(inputId, icon) {
+    const passwordInput = document.getElementById(inputId);
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.textContent = '🙈'; // Hide icon
+    } else {
+        passwordInput.type = 'password';
+        icon.textContent = '👁️'; // Show icon
+    }
+}
+    </script>
+</body>
+</html>

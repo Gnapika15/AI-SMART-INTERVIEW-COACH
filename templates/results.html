@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - AI Smart Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="results-container">
+            <div class="results-header">
+                <h1>🎉 Interview Complete!</h1>
+                <h2>{{ username }}'s Performance Report</h2>
+            </div>
+            
+            <div class="score-summary">
+                <div class="score-card">
+                    <h3>Total Score</h3>
+                    <p class="big-score">{{ total_score }}/{{ total_questions * 10 }}</p>
+                </div>
+                
+                <div class="score-card">
+                    <h3>Average Score</h3>
+                    <p class="big-score">{{ avg_score }}/10</p>
+                </div>
+                
+                <div class="score-card">
+                    <h3>Questions Answered</h3>
+                    <p class="big-score">{{ total_questions }}</p>
+                </div>
+                
+                <div class="score-card performance-badge">
+                    <h3>Performance</h3>
+                    {% if avg_score >= 8 %}
+                        <p class="badge excellent">Excellent! 🌟</p>
+                    {% elif avg_score >= 6 %}
+                        <p class="badge good">Good! 👍</p>
+                    {% elif avg_score >= 4 %}
+                        <p class="badge average">Average 📊</p>
+                    {% else %}
+                        <p class="badge needs-improvement">Keep Practicing 💪</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="detailed-results">
+                <h2>Detailed Question-wise Analysis</h2>
+                
+                {% for result in results %}
+                <div class="result-item">
+                    <div class="result-header">
+                        <h3>Question {{ loop.index }}</h3>
+                        <span class="score-badge 
+                            {% if result.score >= 8 %}excellent
+                            {% elif result.score >= 6 %}good
+                            {% elif result.score >= 4 %}average
+                            {% else %}low{% endif %}">
+                            Score: {{ result.score }}/10
+                        </span>
+                    </div>
+                    
+                    <div class="result-content">
+                        <p class="question"><strong>Q:</strong> {{ result.question }}</p>
+                        
+                        <div class="answer-section">
+                            <p><strong>Your Answer:</strong></p>
+                            <p class="user-answer">{{ result.user_answer }}</p>
+                        </div>
+                        
+                        <div class="feedback-section">
+                            <p><strong>📊 Feedback:</strong></p>
+                            <p class="feedback">{{ result.feedback }}</p>
+                        </div>
+                        
+                        {% if result.missing_keywords != 'None' %}
+                        <div class="missing-keywords">
+                            <p><strong>⚠️ Missing Key Concepts:</strong></p>
+                            <p class="keywords">{{ result.missing_keywords }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="suggestions">
+                            <p><strong>💡 Suggestions for Improvement:</strong></p>
+                            <ul>
+                                {% for suggestion in result.suggestions %}
+                                <li>{{ suggestion }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="action-buttons">
+                <a href="/categories" class="btn-primary">Practice More Categories</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

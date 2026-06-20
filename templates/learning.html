@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning - AI Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .learning-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .learning-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 12px;
+            z-index: 30;
+            box-shadow: 0 6px 18px rgba(38, 50, 80, 0.08);
+        }
+
+        .header-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-info p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            z-index: 10;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Tabs */
+        .learning-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-btn {
+            background: white;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: transparent;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0.9rem 2.2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.18);
+            transform: translateY(-6px);
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .content-card h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-card h3 {
+            color: #667eea;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .content-card p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .topic-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .topic-list li {
+            color: #555;
+            padding: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .topic-list li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .code-example {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .key-concepts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-card h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-card p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .resources-section {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .resources-section h4 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .resource-item {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .resource-icon {
+            font-size: 1.5rem;
+        }
+
+        .resource-content p {
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .learning-container {
+                padding: 1rem;
+            }
+
+            .learning-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .learning-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="learning-container">
+        <!-- Header -->
+        <div class="learning-header">
+            <div class="header-info">
+                <h1>{{ course_data[category]['icon'] }} {{ course_data[category]['name'] }}</h1>
+                <p>{{ course_data[category]['description'] }}</p>
+            </div>
+            <a href="/courses" class="back-btn">← Back</a>
+        </div>
+
+        <!-- Tabs -->
+        <div class="learning-tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'overview')">Overview</button>
+            <button class="tab-btn" onclick="switchTab(event, 'resources')">Resources</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="content-card">
+                <h2>{{ course_data[category]['icon'] }} Course Overview</h2>
+                <p>{{ course_data[category]['full_description'] }}</p>
+
+                <h3>Topics You'll Learn:</h3>
+                <ul class="topic-list">
+                    {% for topic in course_data[category]['topics'] %}
+                    <li>{{ topic }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Learning Outcomes:</h3>
+                <div class="key-concepts">
+                    {% for outcome in course_data[category]['outcomes'] %}
+                    <div class="concept-card">
+                        <h4>✓ {{ outcome }}</h4>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Concepts Tab -->
+        <div id="concepts" class="tab-content">
+            <div class="content-card">
+                <h2>Key Concepts & Examples</h2>
+
+                {% for concept in course_data[category]['concepts'] %}
+                <div>
+                    <h3>{{ concept['title'] }}</h3>
+                    <p>{{ concept['description'] }}</p>
+                    {% if concept.get('example') %}
+                    <div class="code-example">{{ concept['example'] }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Resources Tab -->
+        <div id="resources" class="tab-content">
+            <div class="content-card">
+                <h2>Learning Resources</h2>
+
+                <div class="resources-section">
+                    <h4>📚 Recommended Reading</h4>
+                    {% for resource in course_data[category]['resources'] %}
+                    <div class="resource-item">
+                        <div class="resource-icon">{{ resource['icon'] }}</div>
+                        <div class="resource-content">
+                            <strong>{{ resource['title'] }}</strong>
+                            <p>{{ resource['description'] }}</p>
+                            {% if resource.get('url') %}
+                            <div class="resource-actions" style="margin-top:8px;">
+                                <a href="{{ resource['url'] }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">Open</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h3 style="margin-top: 2rem;">💡 Learning Tips</h3>
+                <ul class="topic-list">
+                    {% for tip in course_data[category]['tips'] %}
+                    <li>{{ tip }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="/courses" class="btn-secondary">← Back to Courses</a>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            // Hide all content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected content
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Ensure header (course title) remains visible so user always knows which course & section
+            const header = document.querySelector('.learning-header');
+            if (header) {
+                header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // Make sure the active tab is visible (not hidden under header) — scroll it into center
+            setTimeout(() => {
+                try {
+                    event.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } catch (e) {
+                    /* ignore */
+                }
+            }, 220);
+        }
+
+        // --- Study Mode: open content with a notes panel when ?study=1 is in the URL ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('study') === '1') {
+                enableStudyMode();
+            }
+        });
+
+        function enableStudyMode() {
+            const container = document.querySelector('.learning-container');
+            if (!container) return;
+
+            // Wrap existing content area (.learning-container > everything except header) into a study layout
+            const overview = document.getElementById('overview');
+            const concepts = document.getElementById('concepts');
+            const resources = document.getElementById('resources');
+
+            // Create study layout div and move the tab contents into the left column
+            const studyLayout = document.createElement('div');
+            studyLayout.className = 'study-layout';
+
+            // Create main column to hold active tab content
+            const mainCol = document.createElement('div');
+            mainCol.style.minWidth = '0';
+
+            // Move the three content blocks into mainCol
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => mainCol.appendChild(c));
+
+            // Create notes panel on the right
+            const notesPanel = document.createElement('div');
+            notesPanel.className = 'notes-panel';
+            notesPanel.innerHTML = `
+                <h4>Notes</h4>
+                <textarea id="study-notes" placeholder="Write your notes here..."></textarea>
+                <div class="notes-actions">
+                    <button id="save-notes" class="btn-note">Save</button>
+                    <button id="clear-notes" class="btn-note secondary">Clear</button>
+                    <button id="download-notes" class="btn-note secondary">Download</button>
+                </div>
+            `;
+
+            studyLayout.appendChild(mainCol);
+            studyLayout.appendChild(notesPanel);
+
+            // Insert studyLayout after the header and tabs
+            const header = document.querySelector('.learning-header');
+            const tabs = document.querySelector('.learning-tabs');
+            tabs.parentNode.insertBefore(studyLayout, tabs.nextSibling);
+
+            // Load existing notes
+            const key = `notes_{{ category }}`;
+            const textarea = document.getElementById('study-notes');
+            textarea.value = localStorage.getItem(key) || '';
+
+            // Autosave debounce
+            let timeout = null;
+            textarea.addEventListener('input', () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    localStorage.setItem(key, textarea.value);
+                    showToast('Notes autosaved');
+                }, 900);
+            });
+
+            document.getElementById('save-notes').addEventListener('click', () => {
+                localStorage.setItem(key, textarea.value);
+                showToast('Notes saved');
+            });
+
+            document.getElementById('clear-notes').addEventListener('click', () => {
+                if (!confirm('Clear all notes for this course?')) return;
+                textarea.value = '';
+                localStorage.removeItem(key);
+                showToast('Notes cleared');
+            });
+
+            document.getElementById('download-notes').addEventListener('click', () => {
+                const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `notes_{{ category }}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+            });
+
+            // Provide a small toast message helper
+            function showToast(msg) {
+                const t = document.createElement('div');
+                t.textContent = msg;
+                t.style.position = 'fixed';
+                t.style.right = '18px';
+                t.style.bottom = '18px';
+                t.style.padding = '10px 14px';
+                t.style.background = '#333';
+                t.style.color = 'white';
+                t.style.borderRadius = '8px';
+                t.style.boxShadow = '0 6px 20px rgba(0,0,0,0.16)';
+                t.style.zIndex = 9999;
+                document.body.appendChild(t);
+                setTimeout(() => t.remove(), 1600);
+            }
+        }
+    </script>
+</body>
+</html>

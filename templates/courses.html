@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Courses - AI Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .courses-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .courses-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .courses-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-content p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            position: relative;
+            z-index: 10;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Courses Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .course-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .course-level {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .course-content {
+            padding: 2rem;
+        }
+
+        .course-description {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .topics-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .topics-title {
+            color: #333;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .topics-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .topic-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .course-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .course-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .course-button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .courses-container {
+                padding: 1rem;
+            }
+
+            .courses-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .header-content h1 {
+                font-size: 2rem;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-header {
+                padding: 1.5rem;
+            }
+
+            .course-card h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="courses-container">
+        <!-- Header -->
+        <div class="courses-header">
+            <div class="header-content">
+                <h1>📚 Learn Courses</h1>
+                <p>Master technical interview concepts with comprehensive learning material</p>
+            </div>
+            <a href="/home" class="back-btn">← Back to Home</a>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="courses-grid">
+            <!-- Python Course -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">🐍</div>
+                    <h3>Python Programming</h3>
+                    <div class="course-level">Intermediate</div>
+                </div>
+                <div class="course-content">
+                    <p class="course-description">Master Python concepts for technical interviews, from basics to advanced OOP and functional programming.</p>
+                    
+                    <div class="topics-section">
+                        <div class="topics-title">📝 Topics Covered:</div>
+                        <ul class="topics-list">
+                            <li class="topic-tag">Data Types & Variables</li>
+                            <li class="topic-tag">Control Flow</li>
+                            <li class="topic-tag">Functions & Lambda</li>
+                            <li class="topic-tag">Object-Oriented Programming</li>
+                            <li class="topic-tag">List Comprehensions</li>
+                            <li class="topic-tag">Decorators & Generators</li>
+                            <li class="topic-tag">Exception Handling</li>
+                            <li class="topic-tag">File I/O</li>
+                            <li class="topic-tag">Regular Expressions</li>
+                            <li class="topic-tag">Modules & Packages</li>
+                        </ul>
+                    </div>
+
+                    <a href="/learn/Python" class="course-button" style="text-decoration: none; display: block; text-align: center;">🎯 Start Learning</a>
+                </div>
+            </div>
+
+            <!-- Java Course -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">☕</div>
+                    <h3>Java Fundamentals</h3>
+                    <div class="course-level">Intermediate</div>
+                </div>
+                <div class="course-content">
+                    <p class="course-description">Learn Java programming with focus on OOP principles, design patterns, and enterprise development.</p>
+                    
+                    <div class="topics-section">
+                        <div class="topics-title">📝 Topics Covered:</div>
+                        <ul class="topics-list">
+                            <li class="topic-tag">Classes & Objects</li>
+                            <li class="topic-tag">Inheritance & Polymorphism</li>
+                            <li class="topic-tag">Interfaces & Abstract Classes</li>
+                            <li class="topic-tag">Collections Framework</li>
+                            <li class="topic-tag">Exception Handling</li>
+                            <li class="topic-tag">Multithreading</li>
+                            <li class="topic-tag">Streams & Lambda</li>
+                            <li class="topic-tag">File I/O & Serialization</li>
+                            <li class="topic-tag">JDBC & Databases</li>
+                            <li class="topic-tag">Design Patterns</li>
+                        </ul>
+                    </div>
+
+                    <a href="/learn/Java" class="course-button" style="text-decoration: none; display: block; text-align: center;">🎯 Start Learning</a>
+                </div>
+            </div>
+
+            <!-- SQL Course -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">🗄️</div>
+                    <h3>SQL & Databases</h3>
+                    <div class="course-level">Beginner</div>
+                </div>
+                <div class="course-content">
+                    <p class="course-description">Master SQL queries, database design, optimization, and advanced query techniques.</p>
+                    
+                    <div class="topics-section">
+                        <div class="topics-title">📝 Topics Covered:</div>
+                        <ul class="topics-list">
+                            <li class="topic-tag">SELECT & WHERE Clauses</li>
+                            <li class="topic-tag">Joins & Subqueries</li>
+                            <li class="topic-tag">Aggregation Functions</li>
+                            <li class="topic-tag">GROUP BY & HAVING</li>
+                            <li class="topic-tag">Database Design & Normalization</li>
+                            <li class="topic-tag">Indexes & Performance</li>
+                            <li class="topic-tag">Transactions & ACID</li>
+                            <li class="topic-tag">Stored Procedures</li>
+                            <li class="topic-tag">Views & Triggers</li>
+                            <li class="topic-tag">Query Optimization</li>
+                        </ul>
+                    </div>
+
+                    <a href="/learn/SQL" class="course-button" style="text-decoration: none; display: block; text-align: center;">🎯 Start Learning</a>
+                </div>
+            </div>
+
+            <!-- C Course -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">⚙️</div>
+                    <h3>C Programming</h3>
+                    <div class="course-level">Advanced</div>
+                </div>
+                <div class="course-content">
+                    <p class="course-description">Deep dive into C programming covering pointers, memory management, and system-level concepts.</p>
+                    
+                    <div class="topics-section">
+                        <div class="topics-title">📝 Topics Covered:</div>
+                        <ul class="topics-list">
+                            <li class="topic-tag">Variables & Data Types</li>
+                            <li class="topic-tag">Pointers & References</li>
+                            <li class="topic-tag">Arrays & Strings</li>
+                            <li class="topic-tag">Structures & Unions</li>
+                            <li class="topic-tag">Dynamic Memory Allocation</li>
+                            <li class="topic-tag">File I/O Operations</li>
+                            <li class="topic-tag">Function Pointers</li>
+                            <li class="topic-tag">Bitwise Operations</li>
+                            <li class="topic-tag">Preprocessor Directives</li>
+                            <li class="topic-tag">Memory Management</li>
+                        </ul>
+                    </div>
+
+                    <a href="/learn/C" class="course-button" style="text-decoration: none; display: block; text-align: center;">🎯 Start Learning</a>
+                </div>
+            </div>
+
+            <!-- AI Course -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">🤖</div>
+                    <h3>Artificial Intelligence</h3>
+                    <div class="course-level">Advanced</div>
+                </div>
+                <div class="course-content">
+                    <p class="course-description">Explore AI concepts, algorithms, machine learning fundamentals, and practical AI applications.</p>
+                    
+                    <div class="topics-section">
+                        <div class="topics-title">📝 Topics Covered:</div>
+                        <ul class="topics-list">
+                            <li class="topic-tag">AI Fundamentals</li>
+                            <li class="topic-tag">Supervised Learning</li>
+                            <li class="topic-tag">Unsupervised Learning</li>
+                            <li class="topic-tag">Neural Networks</li>
+                            <li class="topic-tag">Deep Learning</li>
+                            <li class="topic-tag">Natural Language Processing</li>
+                            <li class="topic-tag">Computer Vision</li>
+                            <li class="topic-tag">Reinforcement Learning</li>
+                            <li class="topic-tag">Feature Engineering</li>
+                            <li class="topic-tag">Model Evaluation</li>
+                        </ul>
+                    </div>
+
+                    <a href="/learn/AI" class="course-button" style="text-decoration: none; display: block; text-align: center;">🎯 Start Learning</a>
+                </div>
+            </div>
+
+            <!-- Machine Learning Course -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">📊</div>
+                    <h3>Machine Learning</h3>
+                    <div class="course-level">Advanced</div>
+                </div>
+                <div class="course-content">
+                    <p class="course-description">Master machine learning algorithms, model building, evaluation, and real-world ML applications.</p>
+                    
+                    <div class="topics-section">
+                        <div class="topics-title">📝 Topics Covered:</div>
+                        <ul class="topics-list">
+                            <li class="topic-tag">Linear Regression</li>
+                            <li class="topic-tag">Logistic Regression</li>
+                            <li class="topic-tag">Decision Trees</li>
+                            <li class="topic-tag">Random Forests</li>
+                            <li class="topic-tag">Support Vector Machines</li>
+                            <li class="topic-tag">K-Means Clustering</li>
+                            <li class="topic-tag">Feature Scaling & Selection</li>
+                            <li class="topic-tag">Cross-Validation</li>
+                            <li class="topic-tag">Ensemble Methods</li>
+                            <li class="topic-tag">Hyperparameter Tuning</li>
+                        </ul>
+                    </div>
+
+                    <a href="/learn/ML" class="course-button" style="text-decoration: none; display: block; text-align: center;">🎯 Start Learning</a>
+                </div>
+            </div>
+
+            <!-- Full Stack Development Course -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">🌐</div>
+                    <h3>Full Stack Development</h3>
+                    <div class="course-level">Intermediate</div>
+                </div>
+                <div class="course-content">
+                    <p class="course-description">Complete guide to building full-stack applications with modern frontend, backend, and database technologies.</p>
+                    
+                    <div class="topics-section">
+                        <div class="topics-title">📝 Topics Covered:</div>
+                        <ul class="topics-list">
+                            <li class="topic-tag">HTML & CSS</li>
+                            <li class="topic-tag">JavaScript & DOM</li>
+                            <li class="topic-tag">React / Angular</li>
+                            <li class="topic-tag">Backend Frameworks</li>
+                            <li class="topic-tag">RESTful APIs</li>
+                            <li class="topic-tag">Databases & SQL</li>
+                            <li class="topic-tag">Authentication & Security</li>
+                            <li class="topic-tag">Version Control & Git</li>
+                            <li class="topic-tag">Deployment & DevOps</li>
+                            <li class="topic-tag">Testing & Debugging</li>
+                        </ul>
+                    </div>
+
+                    <a href="/learn/FullStack" class="course-button" style="text-decoration: none; display: block; text-align: center;">🎯 Start Learning</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

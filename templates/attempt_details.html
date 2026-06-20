@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt Details - AI Smart Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .details-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .details-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-title p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-item label {
+            display: block;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-item value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Questions Section */
+        .questions-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .questions-section h2 {
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-item {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .question-text {
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .question-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-item {
+            background: white;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .meta-label {
+            font-size: 0.8rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .score-badge.excellent {
+            background: #27ae60;
+            color: white;
+        }
+
+        .score-badge.good {
+            background: #3498db;
+            color: white;
+        }
+
+        .score-badge.average {
+            background: #f39c12;
+            color: white;
+        }
+
+        .score-badge.low {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .feedback-section {
+            background: #f0f0f0;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feedback-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .feedback-text {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Overall Summary */
+        .overall-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .overall-summary h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .summary-stat label {
+            display: block;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 0.3rem;
+        }
+
+        .summary-stat value {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .summary-message {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .back-button-bottom {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button-bottom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .details-container {
+                padding: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.5rem;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .question-item {
+                padding: 1rem;
+            }
+
+            .question-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="details-container">
+        <!-- Header Section -->
+        <div class="details-header">
+            <div class="header-top">
+                <div class="header-title">
+                    <h1>📋 Attempt #{{ result.attempt_number }} Details</h1>
+                    <p>{{ result.timestamp }}</p>
+                </div>
+                <a href="/dashboard" class="back-button">← Back to Dashboard</a>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <label>Category</label>
+                    <value>{{ result.category.replace('_', ' ').title() }}</value>
+                </div>
+                <div class="summary-item">
+                    <label>Total Questions</label>
+                    <value>{{ result.total_questions }}</value>
+                </div>
+                <div class="summary-item">
+                    <label>Total Score</label>
+                    <value>{{ result.total_score }}/{{ result.total_questions * 10 }}</value>
+                </div>
+                <div class="summary-item">
+                    <label>Average Score</label>
+                    <value>{{ result.avg_score }}/10</value>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Breakdown -->
+        <div class="questions-section">
+            <h2>📝 Question-wise Breakdown</h2>
+
+            {% for q in result.results %}
+            <div class="question-item">
+                <div class="question-number">Question {{ loop.index }} of {{ result.results|length }}</div>
+                
+                <div class="question-text">{{ q.question }}</div>
+                
+                <div class="question-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Your Score</div>
+                        <div class="meta-value">{{ q.score }}/10</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Performance</div>
+                        <div class="meta-value">
+                            <span class="score-badge {% if q.score >= 8 %}excellent{% elif q.score >= 6 %}good{% elif q.score >= 4 %}average{% else %}low{% endif %}">
+                                {% if q.score >= 8 %}Excellent{% elif q.score >= 6 %}Good{% elif q.score >= 4 %}Average{% else %}Low{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feedback-section">
+                    <div class="feedback-label">💡 AI Feedback & Suggestions:</div>
+                    <div class="feedback-text">{{ q.feedback }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Overall Summary -->
+        <div class="overall-summary">
+            <h2>🎯 Overall Performance Summary</h2>
+            
+            <div class="summary-stats">
+                <div class="summary-stat">
+                    <label>Average Score</label>
+                    <value>{{ result.avg_score }}/10</value>
+                </div>
+                <div class="summary-stat">
+                    <label>Performance Level</label>
+                    <value>
+                        {% if result.avg_score >= 8 %}
+                            Excellent 🌟
+                        {% elif result.avg_score >= 6 %}
+                            Good 👍
+                        {% elif result.avg_score >= 4 %}
+                            Average 📊
+                        {% else %}
+                            Needs Work 💪
+                        {% endif %}
+                    </value>
+                </div>
+            </div>
+
+            <div class="summary-message">
+                {% if result.avg_score >= 8 %}
+                    <p>Fantastic work! Your performance shows excellent preparation and understanding. Keep up this momentum and tackle more challenging categories!</p>
+                {% elif result.avg_score >= 6 %}
+                    <p>Good effort! You're on the right track. Review the feedback on weaker areas and practice similar questions to improve further.</p>
+                {% elif result.avg_score >= 4 %}
+                    <p>You're making progress! Focus on the questions where you scored lower. Review the AI feedback and practice the same category again.</p>
+                {% else %}
+                    <p>Every practice session teaches you something new! Review the detailed feedback above and try this category again. Consistency will help you improve faster.</p>
+                {% endif %}
+            </div>
+
+            <a href="/categories" class="back-button-bottom">📚 Practice Again</a>
+            <a href="/dashboard" class="back-button-bottom">📊 Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

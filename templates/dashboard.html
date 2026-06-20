@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AI Smart Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .dashboard-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .dashboard-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .hero-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+        }
+
+        .hero-title p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-hero.primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-hero.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-hero.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-hero.secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Overview */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, transparent 70%);
+            opacity: 0.1;
+            border-radius: 50%;
+        }
+
+        .stat-card.stat-attempts { border-left-color: #667eea; }
+        .stat-card.stat-average { border-left-color: #f093fb; }
+        .stat-card.stat-best { border-left-color: #43e97b; }
+        .stat-card.stat-categories { border-left-color: #4facfe; }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card h3 {
+            color: #999;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-trend {
+            font-size: 0.85rem;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        /* Insights Section */
+        .insights-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .insights-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .insight-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .insight-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .insight-card p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .charts-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-container {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        .chart-container h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-item {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .category-stats {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .progress-bar {
+            background: #eee;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        /* History Section */
+        .history-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .history-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .history-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .history-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 0.8rem;
+        }
+
+        .history-header h3 {
+            color: #333;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .timestamp {
+            color: #999;
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        .history-content {
+            margin-bottom: 1rem;
+        }
+
+        .history-content p {
+            margin: 0.5rem 0;
+            color: #555;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .score-badge.excellent {
+            background: #27ae60;
+            color: white;
+        }
+
+        .score-badge.good {
+            background: #3498db;
+            color: white;
+        }
+
+        .score-badge.average {
+            background: #f39c12;
+            color: white;
+        }
+
+        .score-badge.low {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-view-details {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view-details:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .detailed-view {
+            background: white;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .mini-result {
+            background: #f0f0f0;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            border-radius: 4px;
+            border-left: 3px solid #667eea;
+        }
+
+        .mini-result p {
+            margin: 0.3rem 0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .empty-state .btn-primary {
+            margin-top: 1.5rem;
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .hero-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .history-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Back Button */
+        .back-to-home {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .back-to-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Back Button -->
+        <a href="/home" class="back-to-home">← Back to Home</a>
+
+        <!-- Hero Section -->
+        <div class="dashboard-hero">
+            <div class="hero-content">
+                <div class="hero-header">
+                    <div class="hero-title">
+                        <h1>🎯 Welcome Back, {{ username }}!</h1>
+                        <p>Keep pushing your limits and excel in every interview</p>
+                    </div>
+                    <div class="hero-buttons">
+                        <a href="/categories" class="btn-hero primary">➕ Practice Interview</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card stat-attempts">
+                <div class="stat-icon">📝</div>
+                <h3>Total Attempts</h3>
+                <div class="stat-number">{{ total_attempts }}</div>
+                <div class="stat-trend">{% if total_attempts > 0 %}Great progress!{% else %}Start practicing{% endif %}</div>
+            </div>
+
+            <div class="stat-card stat-average">
+                <div class="stat-icon">⭐</div>
+                <h3>Average Score</h3>
+                <div class="stat-number">{{ avg_overall }}<span style="font-size: 1.2rem;">/10</span></div>
+                <div class="stat-trend">{% if avg_overall >= 7 %}Excellent performance!{% elif avg_overall >= 5 %}Good work, keep improving!{% else %}Keep practicing!{% endif %}</div>
+            </div>
+
+            <div class="stat-card stat-best">
+                <div class="stat-icon">🏆</div>
+                <h3>Best Score</h3>
+                <div class="stat-number">{{ best_score }}<span style="font-size: 1.2rem;">/10</span></div>
+                <div class="stat-trend">Your personal best!</div>
+            </div>
+
+            <div class="stat-card stat-categories">
+                <div class="stat-icon">🎓</div>
+                <h3>Categories Tried</h3>
+                <div class="stat-number">{{ categories_attempted|length }}</div>
+                <div class="stat-trend">Diverse practice!</div>
+            </div>
+        </div>
+
+        <!-- Insights Section -->
+        <div class="insights-section">
+            <h2>💡 Quick Insights</h2>
+            <div class="insight-cards">
+                {% if total_attempts > 0 %}
+                    <div class="insight-card">
+                        <h4>📊 Your Journey</h4>
+                        <p>You've completed {{ total_attempts }} interview(s). Consistency is key - keep practicing regularly to improve your skills!</p>
+                    </div>
+                    <div class="insight-card">
+                        <h4>🎯 Next Steps</h4>
+                        <p>{% if avg_overall >= 8 %}Excellent! Try the harder categories to challenge yourself further.{% elif avg_overall >= 6 %}Good work! Focus on weak areas and retake those categories.{% else %}Keep practicing! Consistency will help you improve faster.{% endif %}</p>
+                    </div>
+                    <div class="insight-card">
+                        <h4>🌟 Pro Tip</h4>
+                        <p>Attempt interviews in different categories to build well-rounded skills. Variety in practice leads to better interview performance!</p>
+                    </div>
+                {% else %}
+                    <div class="insight-card">
+                        <h4>🚀 Getting Started</h4>
+                        <p>Begin your first interview practice! Choose from multiple categories and challenge yourself with AI-powered evaluation.</p>
+                    </div>
+                    <div class="insight-card">
+                        <h4>💪 Why Practice?</h4>
+                        <p>Regular practice with instant AI feedback helps you identify strengths and weaknesses, boosting your confidence for real interviews.</p>
+                    </div>
+                    <div class="insight-card">
+                        <h4>🎯 Success Strategy</h4>
+                        <p>Start with easier categories, then gradually move to challenging ones. Track your progress and celebrate every improvement!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        {% if past_results %}
+        <div class="charts-section">
+            <h2>📈 Performance Analytics</h2>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Score Progression</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="scoreChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3>Category Performance</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <h2>📊 Your Strengths & Weaknesses</h2>
+            <div id="progressContainer"></div>
+        </div>
+        {% endif %}
+
+        <!-- History Section -->
+        <div class="history-section">
+            <h2>📚 Recent Practice Sessions</h2>
+            
+            {% if past_results %}
+                <div class="history-grid">
+                    {% for result in past_results|reverse %}
+                    <div class="history-card">
+                        <div class="history-header">
+                            <h3>Attempt #{{ result.attempt_number }}</h3>
+                            <span class="timestamp">{{ result.timestamp }}</span>
+                        </div>
+                        
+                        <div class="history-content">
+                            <p><strong>Category:</strong> <span>{{ result.category.replace('_', ' ').title() }}</span></p>
+                            <p><strong>Questions:</strong> <span>{{ result.total_questions }}</span></p>
+                            <p><strong>Score:</strong> <span>{{ result.total_score }}/{{ result.total_questions * 10 }}</span></p>
+                            <p><strong>Average:</strong> 
+                                <span class="score-badge {% if result.avg_score >= 8 %}excellent{% elif result.avg_score >= 6 %}good{% elif result.avg_score >= 4 %}average{% else %}low{% endif %}">
+                                    {{ result.avg_score }}/10
+                                </span>
+                            </p>
+                        </div>
+                        
+                        <button class="btn-view-details" onclick="viewAttemptDetails({{ loop.index0 }})">View Details</button>
+                        
+                        <form id="details-form-{{ loop.index0 }}" action="/attempt_details" method="POST" style="display: none;">
+                            <input type="hidden" name="attempt_index" value="{{ loop.index0 }}">
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎯</div>
+                    <p style="font-size: 1.2rem; font-weight: 600;">No practice attempts yet!</p>
+                    <p>Start your first interview practice and begin tracking your progress toward interview mastery.</p>
+                    <a href="/categories" class="btn-primary">Start Your First Interview</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        function viewAttemptDetails(index) {
+            document.getElementById('details-form-' + index).submit();
+        }
+
+        const pastResults = {{ past_results|tojson }};
+
+        if (pastResults && pastResults.length > 0) {
+            const scoreData = pastResults.map((r, idx) => ({
+                attempt: idx + 1,
+                score: r.avg_score
+            }));
+
+            const categoryScores = {};
+            const categoryAttempts = {};
+            
+            pastResults.forEach(r => {
+                const cat = r.category.replace('_', ' ');
+                if (!categoryScores[cat]) {
+                    categoryScores[cat] = [];
+                    categoryAttempts[cat] = 0;
+                }
+                categoryScores[cat].push(r.avg_score);
+                categoryAttempts[cat]++;
+            });
+
+            const categoryAvgs = {};
+            Object.keys(categoryScores).forEach(cat => {
+                const avg = categoryScores[cat].reduce((a, b) => a + b, 0) / categoryScores[cat].length;
+                categoryAvgs[cat] = avg.toFixed(1);
+            });
+
+            // Score Trend Chart
+            const scoreCtx = document.getElementById('scoreChart').getContext('2d');
+            new Chart(scoreCtx, {
+                type: 'line',
+                data: {
+                    labels: scoreData.map(d => 'Attempt ' + d.attempt),
+                    datasets: [{
+                        label: 'Average Score',
+                        data: scoreData.map(d => d.score),
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, labels: { font: { size: 12 }, color: '#333' } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 10, ticks: { color: '#666' }, grid: { color: '#eee' } },
+                        x: { ticks: { color: '#666' }, grid: { color: '#eee' } }
+                    }
+                }
+            });
+
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(categoryAvgs),
+                    datasets: [{
+                        label: 'Average Score',
+                        data: Object.values(categoryAvgs),
+                        borderColor: '#764ba2',
+                        backgroundColor: 'rgba(118, 75, 162, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#764ba2'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { beginAtZero: true, max: 10, ticks: { color: '#666', stepSize: 2 }, grid: { color: '#eee' } } },
+                    plugins: { legend: { labels: { font: { size: 12 }, color: '#333' } } }
+                }
+            });
+
+            const progressContainer = document.getElementById('progressContainer');
+            Object.keys(categoryAvgs).sort((a, b) => categoryAvgs[b] - categoryAvgs[a]).forEach(cat => {
+                const score = parseFloat(categoryAvgs[cat]);
+                const percentage = (score / 10) * 100;
+                
+                const progressHtml = `
+                    <div class="category-item">
+                        <div class="category-header">
+                            <span class="category-name">${cat}</span>
+                            <span class="category-stats">${categoryAvgs[cat]}/10 • ${categoryAttempts[cat]} attempt${categoryAttempts[cat] > 1 ? 's' : ''}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+                progressContainer.innerHTML += progressHtml;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt Interview - AI Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .back-button-section {
+            margin-bottom: 2rem;
+        }
+
+        .back-button {
+            background: #5169ff;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            background: #3d4fcf;
+        }
+
+        .interview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            padding: 2rem;
+        }
+
+        .interview-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .interview-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .interview-card h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .interview-card p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .interview-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .interview-details h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .interview-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .interview-details li {
+            padding: 0.5rem 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .interview-details li:before {
+            content: "✓";
+            color: #43e97b;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+            width: 100%;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .interview-card {
+                padding: 2rem;
+            }
+
+            .interview-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .interview-icon {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome, {{ username }}! 👋</h1>
+            <p class="welcome-message">Ready for a comprehensive interview experience?</p>
+        </div>
+
+        <div class="back-button-section">
+            <a href="/home" class="back-button">← Back to Home</a>
+        </div>
+
+        <div class="interview-container">
+            <div class="interview-card">
+                <div class="interview-icon">🎯</div>
+                <h2>Full Interview Challenge</h2>
+                <p>Test your complete skill set with a comprehensive interview covering all major topics</p>
+
+                <div class="interview-details">
+                    <h3>This interview includes:</h3>
+                    <ul>
+                        <li>Logical & Analytical Reasoning</li>
+                        <li>Verbal Ability</li>
+                        <li>HR Interview Questions</li>
+                        <li>Technical Questions</li>
+                    </ul>
+                </div>
+
+                <p style="font-size: 0.95rem; color: #888; margin-bottom: 1.5rem;">
+                    Questions are randomly selected from all sections to simulate a real interview experience
+                </p>
+
+                <form action="/start_interview" method="POST">
+                    <input type="hidden" name="category" value="All_Sections">
+                    <button type="submit" class="start-button">
+                        🚀 Start Full Interview
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

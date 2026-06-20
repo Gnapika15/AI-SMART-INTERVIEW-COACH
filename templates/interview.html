@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview - AI Smart Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .interview-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-control {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-save {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-save:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-previous {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-previous:hover:not(:disabled) {
+            background: #0b7dda;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-previous:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .btn-quit {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-quit:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 150px;
+            gap: 15px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-skip {
+            background: #ff9800;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-skip:hover {
+            background: #e68900;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn-next {
+            background: #667eea;
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-next:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Save Status Message */
+        .save-status {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+            animation: slideDown 0.3s ease;
+        }
+
+        .save-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .save-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .interview-controls {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .btn-control, .btn-primary, .btn-skip, .btn-next {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="interview-container">
+            <div class="progress-header">
+                <h2>{{ category.replace('_', ' ').title() }}</h2>
+                <div class="progress-info">
+                    <span>Question {{ question_num }} of {{ total_questions }}</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ (question_num / total_questions) * 100 }}%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-box">
+                <h3>Question {{ question_num }}:</h3>
+                <p class="question-text">{{ question }}</p>
+            </div>
+            
+            <form action="/submit_answer" method="POST" class="answer-form" onsubmit="return handleFormSubmit(event)">
+    <div class="form-group">
+        <label for="answer">Your Answer:</label>
+        <textarea id="answer" name="answer" rows="8" 
+                  placeholder="Type your answer here...">{{ saved_answer }}</textarea>
+        <small>💡 Tip: Provide detailed answers with key concepts and examples. You can skip if unsure!</small>
+        <div class="save-status" id="saveStatus"></div>
+    </div>
+    
+    <!-- Interview Controls -->
+    <div class="interview-controls">
+        <button type="button" class="btn-control btn-save" id="saveBtn" onclick="saveAnswer(event)" title="Save your answer locally">
+            💾 Save Answer
+        </button>
+        <button type="submit" name="action" value="previous" class="btn-control btn-previous" {% if question_num <= 1 %}disabled{% endif %} title="Go to previous question">
+            ← Previous
+        </button>
+        <button type="button" class="btn-control btn-quit" onclick="if(confirm('Are you sure? Your progress will be saved.')) { localStorage.removeItem('interviewFullscreen'); window.location.href='/home'; }" title="Quit the interview">
+            ⛔ Quit Interview
+        </button>
+    </div>
+
+    <!-- Main Action Buttons -->
+    <div class="button-group">
+        <button type="submit" name="action" value="next" class="btn-next">
+            Next Question →
+        </button>
+        <button type="submit" name="action" value="skip" class="btn-skip">
+            ⏭️ Skip
+        </button>
+    </div>
+</form>
+            
+            <div class="tips-box">
+                <h4>📝 Interview Tips:</h4>
+                <ul>
+                    <li>Take your time to think before answering</li>
+                    <li>Include relevant technical terms and concepts</li>
+                    <li>Provide examples when possible</li>
+                    <li>Structure your answer clearly</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isFullscreenActive = false;
+        let isSubmitting = false;
+        let submissionInProgress = false;
+
+        // Safety mechanism: Reset submission flags if they get stuck
+        setInterval(function() {
+            if (isSubmitting || submissionInProgress) {
+                const timeSinceLastSubmit = Date.now() - (window.lastSubmitTime || 0);
+                if (timeSinceLastSubmit > 5000) { // 5 seconds
+                    console.log('[SAFETY] Resetting stuck submission flags');
+                    isSubmitting = false;
+                    submissionInProgress = false;
+                    enableAllButtons();
+                }
+            }
+        }, 1000);
+
+        // Initialize - check if fullscreen was active in previous page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check localStorage for fullscreen state
+            if (localStorage.getItem('interviewFullscreen') === 'true') {
+                isFullscreenActive = true;
+                // Request fullscreen on page load if it was previously active
+                setTimeout(requestFullscreen, 500);
+            }
+        });
+
+        // Handle double click to enter fullscreen
+        document.addEventListener('dblclick', function(event) {
+            // Prevent default double click behavior
+            event.preventDefault();
+            requestFullscreen();
+            isFullscreenActive = true;
+            // Store in localStorage to persist across page reloads
+            localStorage.setItem('interviewFullscreen', 'true');
+        });
+
+        function requestFullscreen() {
+            const elem = document.documentElement;
+            
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => {
+                        console.log('Fullscreen request failed:', err);
+                    });
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            }
+        }
+
+        // Prevent exiting fullscreen - re-enter if user tries to exit
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement && isFullscreenActive) {
+                // Automatically re-enter fullscreen if user tries to exit
+                setTimeout(requestFullscreen, 100);
+            }
+        });
+
+        // Prevent keyboard shortcuts to exit fullscreen
+        document.addEventListener('keydown', function(event) {
+            // Only prevent if fullscreen is active
+            if (isFullscreenActive) {
+                // Prevent F11 (fullscreen toggle)
+                if (event.key === 'F11') {
+                    event.preventDefault();
+                }
+                // Prevent Escape key to exit fullscreen
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                }
+            }
+        });
+
+        // Clear fullscreen state when interview is finished
+        function clearFullscreenState() {
+            localStorage.removeItem('interviewFullscreen');
+            isFullscreenActive = false;
+        }
+
+        function saveAnswer(event) {
+            event.preventDefault();
+            const textarea = document.getElementById('answer');
+            const answer = textarea.value.trim();
+            const statusDiv = document.getElementById('saveStatus');
+            
+            // Reset and show status div
+            statusDiv.style.display = 'none';
+            statusDiv.className = 'save-status';
+            
+            // Check if answer has meaningful content (at least 10 characters)
+            if (answer.length < 10) {
+                statusDiv.className = 'save-status error';
+                statusDiv.style.display = 'block';
+                statusDiv.textContent = '⚠️ Please write a meaningful answer before saving. Attempt the question!';
+                // Auto-hide after 4 seconds
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 4000);
+                return false;
+            }
+            
+            // Show loading state
+            statusDiv.className = 'save-status';
+            statusDiv.style.display = 'block';
+            statusDiv.style.background = '#d1ecf1';
+            statusDiv.style.color = '#0c5460';
+            statusDiv.textContent = '⏳ Saving answer...';
+            
+            // Send answer to backend to save in session
+            const form = document.querySelector('.answer-form');
+            const fd = new FormData(form);
+            
+            fetch('/save_answer', {
+                method: 'POST',
+                body: fd
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to save');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    statusDiv.className = 'save-status success';
+                    statusDiv.style.display = 'block';
+                    statusDiv.textContent = '✓ Answer saved successfully! You can now move to the next question.';
+                } else {
+                    // Show error message
+                    statusDiv.className = 'save-status error';
+                    statusDiv.style.display = 'block';
+                    statusDiv.textContent = '❌ ' + (data.error || 'Failed to save answer');
+                }
+                
+                // Auto-hide after 4 seconds
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 4000);
+            })
+            .catch(err => {
+                console.error('Save failed:', err);
+                statusDiv.className = 'save-status error';
+                statusDiv.style.display = 'block';
+                statusDiv.textContent = '❌ Failed to save answer. Please try again.';
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 4000);
+            });
+        }
+
+        function disableAllButtons() {
+            const buttons = document.querySelectorAll('button[type="submit"]');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+            });
+        }
+
+        function enableAllButtons(currentQuestionNum = null) {
+            const buttons = document.querySelectorAll('button[type="submit"]');
+            
+            buttons.forEach(btn => {
+                // Check if this is the Previous button by checking its value attribute
+                if (btn.getAttribute('value') === 'previous') {
+                    // Only disable Previous on first question
+                    if (currentQuestionNum !== null && currentQuestionNum <= 1) {
+                        btn.disabled = true;
+                        btn.style.opacity = '0.6';
+                    } else {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    }
+                } else {
+                    // Enable all other buttons
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                }
+            });
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // Prevent double submission
+            if (isSubmitting || submissionInProgress) {
+                console.log('Already submitting... Ignoring duplicate submission');
+                return false;
+            }
+            
+            // Get the submitter button with fallback for older browsers
+            const actionButton = event.submitter;
+            let action = null;
+            
+            if (actionButton) {
+                // Check if button has name="action" attribute
+                if (actionButton.getAttribute('name') === 'action') {
+                    action = actionButton.getAttribute('value');
+                }
+                // Fallback: check button classes
+                else if (actionButton.classList.contains('btn-skip')) {
+                    action = 'skip';
+                } else if (actionButton.classList.contains('btn-next')) {
+                    action = 'next';
+                } else if (actionButton.classList.contains('btn-previous')) {
+                    action = 'previous';
+                }
+            }
+
+            console.log('[SUBMIT] Form submitted with action:', action);
+            console.log('[SUBMIT] Button element:', actionButton);
+            console.log('[SUBMIT] Button name:', actionButton ? actionButton.getAttribute('name') : 'no button');
+            console.log('[SUBMIT] Button value:', actionButton ? actionButton.getAttribute('value') : 'no value');
+
+            // For navigation actions, submit via AJAX so fullscreen is preserved
+            if (action === 'previous' || action === 'skip' || action === 'next') {
+                // If clicking Next, warn if answer is too short (but not for Skip)
+                if (action === 'next') {
+                    const textarea = document.getElementById('answer');
+                    const answer = textarea.value.trim();
+                    if (answer.length < 10) {
+                        if (!confirm('Your answer seems very short. Are you sure you want to continue without attempting the question?')) {
+                            console.log('[SUBMIT] User cancelled next action');
+                            return false;
+                        }
+                    }
+                }
+
+                // Disable all buttons during submission
+                console.log('[SUBMIT] Setting submission flags...');
+                window.lastSubmitTime = Date.now();
+                isSubmitting = true;
+                submissionInProgress = true;
+                disableAllButtons();
+
+                const form = event.target;
+                const fd = new FormData(form);
+                if (action) fd.set('action', action);
+
+                try {
+                    console.log('[SUBMIT] Sending AJAX request for action:', action);
+                    const resp = await fetch('/submit_answer', {
+                        method: 'POST',
+                        body: fd,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    console.log('[SUBMIT] Response status:', resp.status);
+
+                    if (!resp.ok) {
+                        throw new Error(`HTTP error! status: ${resp.status}`);
+                    }
+
+                    const data = await resp.json();
+                    console.log('[SUBMIT] Response data:', data);
+
+                    if (data.error) {
+                        console.error('[SUBMIT] Server error:', data.error);
+                        alert('Error: ' + data.error);
+                        isSubmitting = false;
+                        submissionInProgress = false;
+                        enableAllButtons();
+                        return false;
+                    }
+
+                    if (data.finished) {
+                        console.log('[SUBMIT] Interview finished - redirecting to results');
+                        // Clear fullscreen state and navigate to results
+                        localStorage.removeItem('interviewFullscreen');
+                        isSubmitting = false;
+                        submissionInProgress = false;
+                        window.location.href = data.redirect || '/results';
+                        return;
+                    }
+
+                    // Update question and progress without reloading
+                    const qText = document.querySelector('.question-text');
+                    const qHeader = document.querySelector('.question-box h3');
+                    const progressSpan = document.querySelector('.progress-info span');
+                    const progressFill = document.querySelector('.progress-fill');
+                    const textarea = document.getElementById('answer');
+
+                    console.log('[SUBMIT] Updating UI for question:', data.question_num, 'of', data.total_questions);
+
+                    if (qText) qText.textContent = data.question;
+                    if (qHeader) qHeader.textContent = `Question ${data.question_num}:`;
+                    if (progressSpan) progressSpan.textContent = `Question ${data.question_num} of ${data.total_questions}`;
+                    if (progressFill) progressFill.style.width = ((data.question_num / data.total_questions) * 100) + '%';
+                    if (textarea) textarea.value = data.saved_answer || '';
+
+                    // Clear save status message
+                    const saveStatus = document.getElementById('saveStatus');
+                    if (saveStatus) saveStatus.style.display = 'none';
+
+                    // Re-enable all buttons BEFORE they get used again
+                    console.log('[SUBMIT] Re-enabling buttons...');
+                    setTimeout(() => {
+                        isSubmitting = false;
+                        submissionInProgress = false;
+                        enableAllButtons(data.question_num);
+                        console.log('[SUBMIT] Buttons re-enabled successfully');
+                    }, 100);
+                    
+                    console.log('[SUBMIT] Question updated successfully');
+
+                } catch (err) {
+                    console.error('[SUBMIT] AJAX submit error:', err);
+                    alert('Failed to proceed. Error: ' + err.message);
+                    
+                    // Re-enable buttons on error
+                    console.log('[SUBMIT] Error occurred - re-enabling buttons');
+                    isSubmitting = false;
+                    submissionInProgress = false;
+                    enableAllButtons();
+                }
+
+                return false;
+            }
+
+            // If not a navigation action, allow normal submit
+            return true;
+        }
+    </script>
+</body>
+</html>

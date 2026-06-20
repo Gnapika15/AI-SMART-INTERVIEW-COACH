@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Tests - AI Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .interview-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .interview-section-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: white;
+            text-align: center;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .interview-section-card.aptitude {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .interview-section-card.verbal {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .interview-section-card.hr {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .interview-section-card.technical {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .interview-section-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .types-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #f9f9f9;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #c0392b;
+        }
+
+        .interview-types {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .interview-type-option {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .interview-type-option:hover {
+            border-color: #5169ff;
+            box-shadow: 0 4px 12px rgba(81, 105, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .interview-type-option h3 {
+            color: #333;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .interview-type-option p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #5169ff;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .back-button-section {
+            margin-bottom: 2rem;
+        }
+
+        .back-button {
+            background: #5169ff;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            background: #3d4fcf;
+        }
+
+        @media (max-width: 768px) {
+            .interview-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 20% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome, {{ username }}! 👋</h1>
+            <p class="welcome-message">Choose a specific section to practice</p>
+        </div>
+
+        <div id="mainView">
+            <div class="back-button-section">
+                <a href="/home" class="back-button">← Back to Home</a>
+            </div>
+            <h2 style="text-align: center; color: #333; margin-bottom: 2rem;">Practice Specific Sections</h2>
+            
+            <div class="interview-sections">
+                <!-- Aptitude Section -->
+                <button class="interview-section-card aptitude" onclick="showInterviewTypes('Aptitude', 'Aptitude')">
+                    <div class="section-icon">📊</div>
+                    <div class="section-name">Aptitude</div>
+                    <div class="section-description">Practice logical and analytical reasoning</div>
+                </button>
+
+                <!-- Verbal Section -->
+                <button class="interview-section-card verbal" onclick="showInterviewTypes('Verbal', 'Verbal')">
+                    <div class="section-icon">📝</div>
+                    <div class="section-name">Verbal</div>
+                    <div class="section-description">Grammar, vocabulary, and comprehension</div>
+                </button>
+
+                <!-- HR Section -->
+                <button class="interview-section-card hr" onclick="showInterviewTypes('HR', 'HR Interview')">
+                    <div class="section-icon">💼</div>
+                    <div class="section-name">HR Interview</div>
+                    <div class="section-description">Behavioral and situational questions</div>
+                </button>
+
+                <!-- Technical Section -->
+                <button class="interview-section-card technical" onclick="showInterviewTypes('Technical', 'Technical')">
+                    <div class="section-icon">💻</div>
+                    <div class="section-name">Technical</div>
+                    <div class="section-description">Programming and technical concepts</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Interview Types Modal -->
+        <div id="typesModal" class="types-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Select Interview Type</h2>
+                    <button class="close-btn" onclick="closeModal()">Close</button>
+                </div>
+
+                <a class="back-link" onclick="goBack()">← Back to Sections</a>
+
+                <div id="typesContainer" class="interview-types"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const interviewData = {
+            'Aptitude': [
+                { name: 'Logical Reasoning', description: 'Practice logical thinking and problem-solving', value: 'Aptitude_Logical', icon: '🧠' },
+                { name: 'Analytical Reasoning', description: 'Test your analytical and deductive skills', value: 'Aptitude_Reasoning', icon: '📐' }
+            ],
+            'Verbal': [
+                { name: 'Verbal Ability', description: 'Grammar, vocabulary, and comprehension', value: 'Verbal', icon: '📖' }
+            ],
+            'HR': [
+                { name: 'HR Questions', description: 'Behavioral and situational questions', value: 'HR', icon: '💼' }
+            ],
+            'Technical': [
+                { name: 'Python', description: 'Python concepts and fundamentals', value: 'Python', icon: '🐍' },
+                { name: 'Java', description: 'Java programming concepts', value: 'Java', icon: '☕' },
+                { name: 'SQL', description: 'Database queries and concepts', value: 'SQL', icon: '🗄️' },
+                { name: 'C', description: 'C programming language fundamentals', value: 'C', icon: '⚙️' },
+                { name: 'AI', description: 'Artificial Intelligence concepts and algorithms', value: 'AI', icon: '🤖' },
+                { name: 'ML', description: 'Machine Learning models and techniques', value: 'ML', icon: '📊' },
+                { name: 'FullStack', description: 'Full-stack web development technologies', value: 'FullStack', icon: '🌐' }
+            ]
+        };
+
+        function showInterviewTypes(section, displayName) {
+            const modal = document.getElementById('typesModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const typesContainer = document.getElementById('typesContainer');
+
+            modalTitle.textContent = displayName + ' - Select Interview Type';
+            typesContainer.innerHTML = '';
+
+            const types = interviewData[section] || [];
+
+            types.forEach(type => {
+                const typeOption = document.createElement('form');
+                typeOption.action = '/start_interview';
+                typeOption.method = 'POST';
+                typeOption.innerHTML = `
+                    <input type="hidden" name="category" value="${type.value}">
+                    <button type="submit" class="interview-type-option">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span style="font-size: 2rem;">${type.icon}</span>
+                            <div style="text-align: left;">
+                                <h3 style="margin: 0;">${type.name}</h3>
+                                <p style="margin: 0.3rem 0 0 0;">${type.description}</p>
+                            </div>
+                        </div>
+                    </button>
+                `;
+                typesContainer.appendChild(typeOption);
+            });
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('typesModal');
+            modal.style.display = 'none';
+        }
+
+        function goBack() {
+            closeModal();
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('typesModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

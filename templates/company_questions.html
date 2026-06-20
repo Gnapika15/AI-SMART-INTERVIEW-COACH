@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Questions - AI Interview Coach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .company-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .company-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-content p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Company Grid */
+        .company-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .company-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .company-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .company-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .company-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .company-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .company-focus {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .company-card-content {
+            padding: 2rem;
+        }
+
+        .company-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-label {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .topics-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .topics-list li {
+            color: #555;
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .topics-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-hard {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .difficulty-medium {
+            background: #ffd93d;
+            color: white;
+        }
+
+        .difficulty-easy {
+            background: #51cf66;
+            color: white;
+        }
+
+        .company-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .company-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .stat-box {
+            background: #f5f5f5;
+            padding: 0.8rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 0.3rem;
+        }
+
+        .back-to-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-to-home a {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-home a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Questions Section */
+        .questions-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .questions-section h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 1.5rem;
+        }
+
+        .question-item {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+            padding-left: 1.5rem;
+        }
+
+        .question-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-text:hover {
+            color: #764ba2;
+        }
+
+        .question-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .question-item.active .question-toggle {
+            transform: rotate(180deg);
+        }
+
+        .question-answer {
+            color: #555;
+            line-height: 1.8;
+            display: none;
+            margin-top: 0.7rem;
+        }
+
+        .question-item.active .question-answer {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .difficulty-indicator {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .difficulty-easy-indicator {
+            background: #51cf66;
+            color: white;
+        }
+
+        .difficulty-medium-indicator {
+            background: #ffd93d;
+            color: white;
+        }
+
+        .difficulty-hard-indicator {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .company-container {
+                padding: 1rem;
+            }
+
+            .company-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .company-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .company-card-header {
+                padding: 1.5rem;
+            }
+
+            .company-card-content {
+                padding: 1.5rem;
+            }
+
+            .questions-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="company-container">
+        <!-- Header -->
+        <div class="company-header">
+            <div class="header-content">
+                <h1>🏢 Company Interview Questions</h1>
+                <p>Practice with real interview questions from top tech companies</p>
+            </div>
+            <a href="/home" class="back-btn">← Back to Home</a>
+        </div>
+
+        <!-- Companies Grid -->
+        <div class="company-grid">
+            <!-- Google -->
+            <div class="company-card">
+                <div class="company-card-header">
+                    <div class="company-logo">🔍</div>
+                    <h3>Google</h3>
+                    <div class="company-focus">Search & Cloud Innovation</div>
+                </div>
+                <div class="company-card-content">
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">45+</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">Hard</div>
+                            <div class="stat-label">Difficulty</div>
+                        </div>
+                    </div>
+                    <span class="difficulty-badge difficulty-hard">⚡ Hard</span>
+                    
+                    <div class="company-info">
+                        <div class="info-label">Focus Areas:</div>
+                        <ul class="topics-list">
+                            <li>Algorithms & Data Structures</li>
+                            <li>System Design</li>
+                            <li>Distributed Systems</li>
+                            <li>Coding Optimization</li>
+                        </ul>
+                    </div>
+
+                    <form action="/start_interview" method="POST">
+                        <input type="hidden" name="category" value="Company_Google">
+                        <button type="submit" class="company-button">🎯 Practice Google Questions</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Microsoft -->
+            <div class="company-card">
+                <div class="company-card-header">
+                    <div class="company-logo">💻</div>
+                    <h3>Microsoft</h3>
+                    <div class="company-focus">Software & Cloud Services</div>
+                </div>
+                <div class="company-card-content">
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">42+</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">Hard</div>
+                            <div class="stat-label">Difficulty</div>
+                        </div>
+                    </div>
+                    <span class="difficulty-badge difficulty-hard">⚡ Hard</span>
+
+                    <div class="company-info">
+                        <div class="info-label">Focus Areas:</div>
+                        <ul class="topics-list">
+                            <li>Arrays & Strings</li>
+                            <li>Tree & Recursion</li>
+                            <li>Linked Lists</li>
+                            <li>OOP Concepts</li>
+                        </ul>
+                    </div>
+
+                    <form action="/start_interview" method="POST">
+                        <input type="hidden" name="category" value="Company_Microsoft">
+                        <button type="submit" class="company-button">🎯 Practice Microsoft Questions</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Amazon -->
+            <div class="company-card">
+                <div class="company-card-header">
+                    <div class="company-logo">🔶</div>
+                    <h3>Amazon</h3>
+                    <div class="company-focus">E-commerce & Cloud</div>
+                </div>
+                <div class="company-card-content">
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">Hard</div>
+                            <div class="stat-label">Difficulty</div>
+                        </div>
+                    </div>
+                    <span class="difficulty-badge difficulty-hard">⚡ Hard</span>
+
+                    <div class="company-info">
+                        <div class="info-label">Focus Areas:</div>
+                        <ul class="topics-list">
+                            <li>Dynamic Programming</li>
+                            <li>Graph Problems</li>
+                            <li>Sorting & Searching</li>
+                            <li>System Design</li>
+                        </ul>
+                    </div>
+
+                    <form action="/start_interview" method="POST">
+                        <input type="hidden" name="category" value="Company_Amazon">
+                        <button type="submit" class="company-button">🎯 Practice Amazon Questions</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Questions -->
+        <div class="questions-section">
+            <h2>🔍 Google Interview Questions</h2>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Two Sum - Find two numbers that add up to target
+                    <span class="difficulty-indicator difficulty-easy-indicator">Easy</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Given an array of integers, find two numbers that add up to a specific target number.</p>
+                    <p><strong>Approach:</strong> Use a hash map to store seen numbers. For each number, check if (target - number) exists in the map.</p>
+                    <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(n)</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Longest Substring Without Repeating Characters
+                    <span class="difficulty-indicator difficulty-medium-indicator">Medium</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Find the length of the longest substring without repeating characters.</p>
+                    <p><strong>Approach:</strong> Use sliding window with a hash map to track character indices. Expand the window, contract when duplicate found.</p>
+                    <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(min(m, n))</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Design a URL Shortening Service (System Design)
+                    <span class="difficulty-indicator difficulty-hard-indicator">Hard</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Design a service like bit.ly that shortens long URLs.</p>
+                    <p><strong>Key Components:</strong> URL mapping database, hash function for encoding, rate limiting, CDN for distribution.</p>
+                    <p><strong>Considerations:</strong> Scalability, collision handling, expiration policies, analytics.</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Merge K Sorted Lists
+                    <span class="difficulty-indicator difficulty-hard-indicator">Hard</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Merge K sorted linked lists into one sorted linked list.</p>
+                    <p><strong>Approach:</strong> Use a min-heap to efficiently get the smallest element from K lists at each step.</p>
+                    <p><strong>Time Complexity:</strong> O(n*k*log(k)) | <strong>Space Complexity:</strong> O(k)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Microsoft Questions -->
+        <div class="questions-section">
+            <h2>💻 Microsoft Interview Questions</h2>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Reverse a String
+                    <span class="difficulty-indicator difficulty-easy-indicator">Easy</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Reverse a given string in-place.</p>
+                    <p><strong>Approach:</strong> Use two pointers at start and end, swap characters and move pointers towards center.</p>
+                    <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(1)</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Binary Tree Level Order Traversal
+                    <span class="difficulty-indicator difficulty-medium-indicator">Medium</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Return the level order traversal (BFS) of a binary tree.</p>
+                    <p><strong>Approach:</strong> Use a queue to traverse level by level. Add all children of current level before moving to next.</p>
+                    <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(w) where w is max width</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Word Ladder (Graph Problem)
+                    <span class="difficulty-indicator difficulty-hard-indicator">Hard</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Find shortest path from start word to end word, changing one letter at a time.</p>
+                    <p><strong>Approach:</strong> BFS where each neighbor is a word with one letter different. Use word patterns for efficiency.</p>
+                    <p><strong>Time Complexity:</strong> O(n*L²) | <strong>Space Complexity:</strong> O(n)</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Serialize and Deserialize Binary Tree
+                    <span class="difficulty-indicator difficulty-hard-indicator">Hard</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Design an algorithm to serialize and deserialize a binary tree.</p>
+                    <p><strong>Approach:</strong> Use pre-order traversal with special markers for null nodes. Deserialize by building tree back from sequence.</p>
+                    <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(n)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amazon Questions -->
+        <div class="questions-section">
+            <h2>🔶 Amazon Interview Questions</h2>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Climbing Stairs - Dynamic Programming
+                    <span class="difficulty-indicator difficulty-easy-indicator">Easy</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Climb n stairs. Each step you can climb 1 or 2 stairs. Count distinct ways.</p>
+                    <p><strong>Approach:</strong> DP where dp[i] = dp[i-1] + dp[i-2]. Also known as Fibonacci sequence.</p>
+                    <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(n) or O(1) with optimization</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Course Schedule (Topological Sort)
+                    <span class="difficulty-indicator difficulty-medium-indicator">Medium</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Given prerequisites, determine if you can complete all courses.</p>
+                    <p><strong>Approach:</strong> Build graph and detect cycle using DFS or Kahn's algorithm for topological sort.</p>
+                    <p><strong>Time Complexity:</strong> O(V + E) | <strong>Space Complexity:</strong> O(V + E)</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Number of Islands (Graph DFS/BFS)
+                    <span class="difficulty-indicator difficulty-medium-indicator">Medium</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Given a grid, count the number of islands (connected land cells).</p>
+                    <p><strong>Approach:</strong> DFS/BFS from each unvisited land cell to mark entire island, increment counter.</p>
+                    <p><strong>Time Complexity:</strong> O(m*n) | <strong>Space Complexity:</strong> O(m*n)</p>
+                </div>
+            </div>
+
+            <div class="question-item" onclick="toggleQuestion(event)">
+                <div class="question-text">
+                    <span class="question-toggle">▼</span>
+                    Design a Movie Rental System (LLD)
+                    <span class="difficulty-indicator difficulty-hard-indicator">Hard</span>
+                </div>
+                <div class="question-answer">
+                    <p><strong>Problem:</strong> Design classes for a movie rental system with rentals and returns.</p>
+                    <p><strong>Approach:</strong> Movie, Customer, Rental, Store classes. Handle stock management and pricing.</p>
+                    <p><strong>Key Points:</strong> OOP principles, encapsulation, polymorphism for different movie types.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="back-to-home">
+            <a href="/home">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleQuestion(event) {
+            const questionItem = event.currentTarget;
+            questionItem.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
